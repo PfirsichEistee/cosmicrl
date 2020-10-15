@@ -1,0 +1,233 @@
+<meta>
+	<info author="Kelox" name="Cosmic" type="gamemode"/>
+	
+	<script src="data/data_server.lua" type="server"/>
+	<script src="data/data_client.lua" type="client"/>
+	
+	<script src="data/elementdata_server.lua" type="server"/>
+	<script src="data/elementdata_client.lua" type="client"/>
+	
+	
+	<script src="general_shared.lua" type="shared"/>
+	<script src="general_server.lua" type="server"/>
+	<script src="general_client.lua" type="client"/>
+	
+	
+	<script src="cmath.lua" type="shared"/>
+	
+	
+	<!-- UI -->
+	<script src="UI/DXGUI/dxgui_main.lua" type="client"/>
+	
+	<script src="UI/DXGUI/dxgui_window.lua" type="client"/>
+	<script src="UI/DXGUI/dxgui_rectangle.lua" type="client"/>
+	<script src="UI/DXGUI/dxgui_tabs.lua" type="client"/>
+	<script src="UI/DXGUI/dxgui_button.lua" type="client"/>
+	<script src="UI/DXGUI/dxgui_edit.lua" type="client"/>
+	<script src="UI/DXGUI/dxgui_memo.lua" type="client"/>
+	<script src="UI/DXGUI/dxgui_text.lua" type="client"/>
+	<script src="UI/DXGUI/dxgui_gridlist.lua" type="client"/>
+	<script src="UI/DXGUI/dxgui_inventory.lua" type="client"/>
+	<script src="UI/DXGUI/dxgui_image.lua" type="client"/>
+	<script src="UI/DXGUI/dxgui_checkbox.lua" type="client"/>
+	<script src="UI/DXGUI/dxgui_progressbar.lua" type="client"/>
+	<script src="UI/DXGUI/dxgui_slider.lua" type="client"/>
+	<script src="UI/DXGUI/dxgui_custom.lua" type="client"/>
+	
+	<script src="UI/hud_client.lua" type="client"/>
+	<script src="UI/minimap_client.lua" type="client"/>
+	
+	<script src="UI/infobox_client.lua" type="client"/>
+	
+	<script src="UI/nametags_client.lua" type="client"/>
+	
+	
+	<!-- LOGIN -->
+	<script src="login/login_server.lua" type="server"/>
+	<script src="login/login_client.lua" type="client"/>
+	<script src="login/register_client.lua" type="client"/>
+	<script src="login/registerLoginCamera_client.lua" type="client"/>
+	
+	
+	<!-- ADMIN -->
+	<script src="admin/admincmd_server.lua" type="server"/>
+	
+	
+	<!-- INTERIOR -->
+	<script src="interior/spawn_server.lua" type="server"/>
+	
+	<script src="interior/paynspray/paynspray_server.lua" type="server"/>
+	
+	<script src="interior/mechanic/mechanic_server.lua" type="server"/>
+	<script src="interior/mechanic/mechanic_client.lua" type="client"/>
+	<script src="interior/mechanic/dxguimechanic_client.lua" type="client"/>
+	<script src="interior/mechanic/upgradeinfo_shared.lua" type="shared"/>
+	
+	<script src="interior/carhouse/carhouse_server.lua" type="server"/>
+	<script src="interior/carhouse/carhouse_client.lua" type="client"/>
+	<script src="interior/carhouse/carhouse_shared.lua" type="shared"/>
+	
+	
+	<!-- INTERACTSYS -->
+	<script src="interactsys/clicksys_server.lua" type="server"/>
+	<script src="interactsys/clicksys_client.lua" type="client"/>
+	<script src="interactsys/keyuse_client.lua" type="client"/>
+	
+	<script src="interactsys/objects/ATM/atm_server.lua" type="server"/>
+	<script src="interactsys/objects/ATM/atm_client.lua" type="client"/>
+	
+	
+	<!-- VEHICLESYS -->
+	<script src="vehiclesys/vehiclesys_server.lua" type="server"/>
+	<script src="vehiclesys/vehiclesys_client.lua" type="client"/>
+	
+	
+	<!-- ITEMSYS -->
+	<script src="itemsys/items_shared.lua" type="shared"/>
+	<script src="itemsys/items_client.lua" type="client"/>
+	
+	<script src="itemsys/inventory_server.lua" type="server"/>
+	<script src="itemsys/inventory_client.lua" type="client"/>
+	
+	
+	
+	<!-- FILES -->
+	<file src="fonts/Monstercat.ttf"/>
+	
+	<file src="images/DXGUI/InventorySelection.png"/>
+	
+	<file src="images/login/lock.png"/>
+	<file src="images/login/cake.png"/>
+	<file src="images/login/user.png"/>
+	<file src="images/login/gender.png"/>
+	
+	<file src="images/hud/0.png"/>
+	<file src="images/hud/1.png"/>
+	<file src="images/hud/2.png"/>
+	<file src="images/hud/3.png"/>
+	<file src="images/hud/4.png"/>
+	<file src="images/hud/5.png"/>
+	<file src="images/hud/6.png"/>
+	<file src="images/hud/7.png"/>
+	<file src="images/hud/8.png"/>
+	<file src="images/hud/9.png"/>
+	<file src="images/hud/10.png"/>
+	<file src="images/hud/11.png"/>
+	<file src="images/hud/12.png"/>
+	<file src="images/hud/14.png"/>
+	<file src="images/hud/15.png"/>
+	<file src="images/hud/16.png"/>
+	<file src="images/hud/17.png"/>
+	<file src="images/hud/18.png"/>
+	<file src="images/hud/22.png"/>		
+	<file src="images/hud/23.png"/>		
+	<file src="images/hud/24.png"/>		
+	<file src="images/hud/25.png"/>	
+	<file src="images/hud/26.png"/>		
+	<file src="images/hud/27.png"/>		
+	<file src="images/hud/28.png"/>		
+	<file src="images/hud/29.png"/>		
+	<file src="images/hud/30.png"/>		
+	<file src="images/hud/31.png"/>		
+	<file src="images/hud/32.png"/>		
+	<file src="images/hud/33.png"/>		
+	<file src="images/hud/34.png"/>		
+	<file src="images/hud/35.png"/>		
+	<file src="images/hud/36.png"/>		
+	<file src="images/hud/37.png"/>		
+	<file src="images/hud/38.png"/>		
+	<file src="images/hud/39.png"/>		
+	<file src="images/hud/40.png"/>		
+	<file src="images/hud/41.png"/>		
+	<file src="images/hud/42.png"/>		
+	<file src="images/hud/43.png"/>		
+	<file src="images/hud/44.png"/>
+	<file src="images/hud/45.png"/>
+	<file src="images/hud/46.png"/>
+	<file src="images/hud/star.png"/>
+	
+	<file src="images/map/map.jpg"/>
+	<file src="images/map/0-1.png"/>
+	<file src="images/map/0-2.png"/>
+	<file src="images/map/0-3.png"/>
+	<file src="images/map/1.png"/>
+	<file src="images/map/2.png"/>
+	<file src="images/map/3.png"/>
+	<file src="images/map/4.png"/>
+	<file src="images/map/5.png"/>
+	<file src="images/map/6.png"/>
+	<file src="images/map/7.png"/>
+	<file src="images/map/8.png"/>
+	<file src="images/map/9.png"/>
+	<file src="images/map/10.png"/>
+	<file src="images/map/11.png"/>
+	<file src="images/map/12.png"/>
+	<file src="images/map/13.png"/>
+	<file src="images/map/14.png"/>
+	<file src="images/map/15.png"/>
+	<file src="images/map/16.png"/>
+	<file src="images/map/17.png"/>
+	<file src="images/map/18.png"/>
+	<file src="images/map/19.png"/>
+	<file src="images/map/20.png"/>
+	<file src="images/map/21.png"/>
+	<file src="images/map/22.png"/>
+	<file src="images/map/23.png"/>
+	<file src="images/map/24.png"/>
+	<file src="images/map/25.png"/>
+	<file src="images/map/26.png"/>
+	<file src="images/map/27.png"/>
+	<file src="images/map/28.png"/>
+	<file src="images/map/29.png"/>
+	<file src="images/map/30.png"/>
+	<file src="images/map/31.png"/>
+	<file src="images/map/32.png"/>
+	<file src="images/map/33.png"/>
+	<file src="images/map/34.png"/>
+	<file src="images/map/35.png"/>
+	<file src="images/map/36.png"/>
+	<file src="images/map/37.png"/>
+	<file src="images/map/38.png"/>
+	<file src="images/map/39.png"/>
+	<file src="images/map/40.png"/>
+	<file src="images/map/41.png"/>
+	<file src="images/map/42.png"/>
+	<file src="images/map/43.png"/>
+	<file src="images/map/44.png"/>
+	<file src="images/map/45.png"/>
+	<file src="images/map/46.png"/>
+	<file src="images/map/47.png"/>
+	<file src="images/map/48.png"/>
+	<file src="images/map/49.png"/>
+	<file src="images/map/50.png"/>
+	<file src="images/map/51.png"/>
+	<file src="images/map/52.png"/>
+	<file src="images/map/53.png"/>
+	<file src="images/map/54.png"/>
+	<file src="images/map/55.png"/>
+	<file src="images/map/56.png"/>
+	<file src="images/map/57.png"/>
+	<file src="images/map/58.png"/>
+	<file src="images/map/59.png"/>
+	<file src="images/map/60.png"/>
+	<file src="images/map/61.png"/>
+	<file src="images/map/62.png"/>
+	<file src="images/map/63.png"/>
+	
+	<file src="images/items/burger.png"/>
+	<file src="images/items/chocolate.png"/>
+	<file src="images/items/cigarettes.png"/>
+	<file src="images/items/lsd.png"/>
+	<file src="images/items/sprunk.png"/>
+	<file src="images/items/weed.png"/>
+	<file src="images/items/weedseeds.png"/>
+	
+	<file src="images/else/admin1.png"/>
+	<file src="images/else/admin2.png"/>
+	<file src="images/else/admin3.png"/>
+	<file src="images/else/admin4.png"/>
+	<file src="images/else/admin5.png"/>
+	<file src="images/else/admin6.png"/>
+	<file src="images/else/admin7.png"/>
+	<file src="images/else/admin8.png"/>
+</meta>
