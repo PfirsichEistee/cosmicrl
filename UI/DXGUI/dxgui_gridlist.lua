@@ -105,6 +105,7 @@ function dxgui_CreateGridList(px, py, pw, ph, pRows, relative, parent)
 		element = createElement("dxgui"),
 		kill = false,
 		enabled = true,
+		visible = true,
 		alpha = 0,
 		
 		-- Main functions
@@ -230,8 +231,13 @@ function dxgui_GridListGetItem(element, index)
 end
 
 
-function dxgui_GridListAllowSort(element, allow)
+function dxgui_GridListSetAllowSort(element, allow)
 	dxgui_GetElementTable(element).allowSort = allow
+end
+
+
+function dxgui_GridListGetAllowSort(element)
+	return dxgui_GetElementTable(element).allowSort
 end
 
 

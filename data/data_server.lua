@@ -1,5 +1,5 @@
 
-local MYSQLUSER = "defuser"
+local MYSQLUSER = "root"
 local MYSQLPASSWORD = ""
 
 dbHandler = nil

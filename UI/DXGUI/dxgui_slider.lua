@@ -63,6 +63,7 @@ function dxgui_CreateSlider(px, py, pw, ph, relative, parent)
 		element = createElement("dxgui"),
 		kill = false,
 		enabled = true,
+		visible = true,
 		alpha = 0,
 		
 		-- Main functions

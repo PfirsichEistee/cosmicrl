@@ -44,6 +44,17 @@ local function invClick()
 end
 
 
+local function updateInvTitle()
+	local item = dxgui_InventoryGetSelectedItem(gui["inv"])
+	
+	if item then
+		dxgui_GetElementTable(gui["window"]).title = getItemName(item.id)
+	else
+		dxgui_GetElementTable(gui["window"]).title = "Inventar"
+	end
+end
+
+
 
 local function openInventory()
 	if gui["window"] then
@@ -71,6 +82,7 @@ local function openInventory()
 	gui["close"] = dxgui_CreateButton(space, winH - titleHeight - space, btnW, titleHeight, "Schliessen", false, gui["window"])
 	
 	
+	addEventHandler("onDXGUIClicked", gui["inv"], updateInvTitle)
 	addEventHandler("onDXGUIClicked", gui["close"], closeInventory)
 	
 	
@@ -225,3 +237,14 @@ local function clientSyncInventory(item, reset)
 	end
 end
 addEventHandler("clientSyncInventory", getRootElement(), clientSyncInventory)
+
+
+
+function localInventoryGetItem(id)
+	for a, b in ipairs(localInventory) do
+		if b.id == id then
+			return b.amount
+		end
+	end
+	return 0
+end

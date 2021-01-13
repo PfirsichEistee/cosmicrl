@@ -5,6 +5,10 @@ local inv = {}
 -- inv[USER ID] = { ..... }
 
 
+local unusable = { 8, 9, 10, 11, 12, }
+local undroppable = { 8, 9, 10, 11, 12, }
+
+
 
 function cosmicGetPlayerItem(player, itemID)
 	local userID = NameToID(getPlayerName(player))

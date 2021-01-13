@@ -122,6 +122,7 @@ function dxgui_CreateInventory(px, py, pw, ph, pColumns, pRows, relative, parent
 		element = createElement("dxgui"),
 		kill = false,
 		enabled = true,
+		visible = true,
 		alpha = 0,
 		
 		-- Main functions

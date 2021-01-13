@@ -18,7 +18,7 @@ local function draw(obj, delta, plusX, plusY)
 	
 	for i = 1, #obj.tab, 1 do
 		for a, b in ipairs(obj.tab[i]) do
-			if (b.alpha > 0) then
+			if b.visible and b.alpha > 0 then
 				b.draw(b, delta, x, y)
 			end
 		end
@@ -90,6 +90,7 @@ function dxgui_CreateTabs(px, py, pw, ph, pTitle, relative, parent)
 		element = createElement("dxgui"),
 		kill = false,
 		enabled = true,
+		visible = true,
 		alpha = 0,
 		
 		-- Main functions

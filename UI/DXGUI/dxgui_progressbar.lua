@@ -36,6 +36,7 @@ function dxgui_CreateProgressBar(px, py, pw, ph, pText, relative, parent)
 		element = createElement("dxgui"),
 		kill = false,
 		enabled = true,
+		visible = true,
 		alpha = 0,
 		
 		-- Main functions
@@ -91,6 +92,6 @@ function dxgui_SetProgress(element, progress)
 end
 
 
-function dxgui_GetProgress(element, progress)
+function dxgui_GetProgress(element)
 	return dxgui_GetElementTable(element).progress
 end

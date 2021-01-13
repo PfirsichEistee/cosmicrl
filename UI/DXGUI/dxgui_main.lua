@@ -21,17 +21,29 @@ dxgui_Selection = nil
 dxgui_FontA = dxCreateFont("fonts/Monstercat.ttf", 32)
 
 
+local lastClickWasGui = false
+local function catchGuiClick()
+	lastClickWasGui = true
+end
+addEventHandler("onClientGUIClick", getRootElement(), catchGuiClick)
+
+
 
 function dxgui_AddItem(elementTable)
 	table.insert(object, elementTable)
 end
 
+function dxgui_GetTable()
+	return object
+end
+
 function dxgui_Kill(element)
-	for a, b in ipairs(object) do
+	dxgui_GetElementTable(element).kill = true
+	--[[for a, b in ipairs(object) do
 		if (b.element == element) then
 			b.kill = true
 		end
-	end
+	end]]
 end
 
 function dxgui_GetElementTable(element)
@@ -57,6 +69,36 @@ function dxgui_GetElementTable(element)
 				for c, d in ipairs(b.tab[i]) do
 					if (d.element == element) then
 						return d
+					end
+				end
+			end
+		end
+	end
+end
+
+function dxgui_GetTableParent(elementTable)
+	for a, b in ipairs(object) do
+		if b == elementTable then
+			return nil
+		elseif (b.child ~= nil) then
+			for c, d in ipairs(b.child) do
+				if d == elementTable then
+					return b
+				elseif (d.tab ~= nil) then
+					for i = 1, #d.tab, 1 do
+						for e, f in ipairs(d.tab[i]) do
+							if f == elementTable then
+								return d
+							end
+						end
+					end
+				end
+			end
+		elseif (b.tab ~= nil) then
+			for i = 1, #b.tab, 1 do
+				for c, d in ipairs(b.tab[i]) do
+					if d == elementTable then
+						return b
 					end
 				end
 			end
@@ -128,18 +170,18 @@ function dxgui_SetColor(element, r, g, b, a)
 end
 
 function dxgui_GetCursorHoveringElementTable()
-	if (isCursorShowing() == false) then
+	if not isCursorShowing() then
 		return
 	end
 	
 	for i = 1, #object, 1 do
-		if (cmath.isPointInRect(mouseX, mouseY, object[i].x, object[i].y, object[i].w, object[i].h) == true) then
-			if (object[i].child ~= nil) then
+		if object[i].visible and dxgui_IsCursorOverElementWithChilds(object[i]) then
+			if object[i].child ~= nil then
 				for a, b in ipairs(object[i].child) do
-					if (cmath.isPointInRect(mouseX, mouseY, b.x + object[i].x, b.y + object[i].y, b.w, b.h) == true) then
-						if (b.tab ~= nil) then
+					if b.visible and cmath.isPointInRect(mouseX, mouseY, b.x + object[i].x, b.y + object[i].y, b.w, b.h) then
+						if b.tab ~= nil then
 							for c, d in ipairs(b.tab[b.selectedTab]) do
-								if (cmath.isPointInRect(mouseX, mouseY, d.x + b.x + object[i].x, d.y + b.y + object[i].y, b.w, b.h) == true) then
+								if d.visible and cmath.isPointInRect(mouseX, mouseY, d.x + b.x + object[i].x, d.y + b.y + object[i].y, b.w, b.h) then
 									return d
 								end
 							end
@@ -148,9 +190,9 @@ function dxgui_GetCursorHoveringElementTable()
 						return b
 					end
 				end
-			elseif (object[i].tab ~= nil) then
+			elseif object[i].tab ~= nil then
 				for a, b in ipairs(object[i].tab[object[i].selectedTab]) do
-					if (cmath.isPointInRect(mouseX, mouseY, b.x + object[i].x, b.y + object[i].y, b.w, b.h) == true) then
+					if b.visible and cmath.isPointInRect(mouseX, mouseY, b.x + object[i].x, b.y + object[i].y, b.w, b.h) then
 						return b
 					end
 				end
@@ -162,22 +204,22 @@ function dxgui_GetCursorHoveringElementTable()
 end
 
 function dxgui_IsCursorHoveringElement(elementTable)
-	if (isCursorShowing() == false) then
+	if not isCursorShowing() then
 		return false
 	end
 	
 	for i = 1, #object, 1 do
-		if (cmath.isPointInRect(mouseX, mouseY, object[i].x, object[i].y, object[i].w, object[i].h) == true) then
-			if (object[i] == elementTable) then
+		if object[i].visible and cmath.isPointInRect(mouseX, mouseY, object[i].x, object[i].y, object[i].w, object[i].h) then
+			if object[i] == elementTable then
 				return true
 			else
-				if (object[i].child ~= nil) then
+				if object[i].child ~= nil then
 					for a, b in ipairs(object[i].child) do
-						if (b == elementTable and cmath.isPointInRect(mouseX, mouseY, b.x + object[i].x, b.y + object[i].y, b.w, b.h) == true) then
+						if b.visible and b == elementTable and cmath.isPointInRect(mouseX, mouseY, b.x + object[i].x, b.y + object[i].y, b.w, b.h) then
 							return true
-						elseif (b.tab ~= nil) then
+						elseif b.tab ~= nil then
 							for c, d in ipairs(b.tab[b.selectedTab]) do
-								if (d == elementTable and cmath.isPointInRect(mouseX, mouseY, d.x + b.x + object[i].x, d.y + b.y + object[i].y, d.w, d.h) == true) then
+								if d.visible and d == elementTable and cmath.isPointInRect(mouseX, mouseY, d.x + b.x + object[i].x, d.y + b.y + object[i].y, d.w, d.h) then
 									return true
 								end
 							end
@@ -185,7 +227,7 @@ function dxgui_IsCursorHoveringElement(elementTable)
 					end
 				elseif (object[i].tab ~= nil) then
 					for a, b in ipairs(object[i].tab[object[i].selectedTab]) do
-						if (b == elementTable and cmath.isPointInRect(mouseX, mouseY, b.x + object[i].x, b.y + object[i].y, b.w, b.h) == true) then
+						if b.visible and b == elementTable and cmath.isPointInRect(mouseX, mouseY, b.x + object[i].x, b.y + object[i].y, b.w, b.h) then
 							return true
 						end
 					end
@@ -193,6 +235,30 @@ function dxgui_IsCursorHoveringElement(elementTable)
 			end
 			
 			break
+		end
+	end
+	
+	return false
+end
+
+function dxgui_IsCursorOverElementWithChilds(elementTable)
+	if not isCursorShowing() or not elementTable.visible then
+		return false
+	end
+	
+	local x, y = dxgui_GetGlobalPosition(elementTable)
+	--local x, y = elementTable.x, elementTable.y
+	
+	if cmath.isPointInRect(mouseX, mouseY, x, y, elementTable.w, elementTable.h) then
+		return true
+	elseif elementTable.child ~= nil then
+		x = mouseX - x
+		y = mouseY - y
+		
+		for a, b in ipairs(elementTable.child) do
+			if cmath.isPointInRect(x, y, b.x, b.y, b.w, b.h) then
+				return true
+			end
 		end
 	end
 	
@@ -365,7 +431,9 @@ local function render()
 	
 	-- Draw objects
 	for i = #object, 1, -1 do
-		object[i].draw(object[i], delta)
+		if object[i].visible then
+			object[i].draw(object[i], delta)
+		end
 	end
 	
 	
@@ -380,7 +448,12 @@ addEventHandler("onClientRender", root, render)
 
 
 local function click(button, state, x, y, worldX, worldY, worldZ, clickedElement)
-	if (isCursorShowing() == false or button ~= "left") then
+	if lastClickWasGui then
+		lastClickWasGui = false
+		dxgui_ClearSelection()
+		return
+	end
+	if not isCursorShowing() or button ~= "left" then
 		return
 	end
 	
@@ -394,7 +467,8 @@ local function click(button, state, x, y, worldX, worldY, worldZ, clickedElement
 	if (down == true) then
 		-- Look for new selected
 		for i = 1, #object, 1 do
-			if (cmath.isPointInRect(x, y, object[i].x, object[i].y, object[i].w, object[i].h) == true and object[i].kill == false) then
+			--if (cmath.isPointInRect(x, y, object[i].x, object[i].y, object[i].w, object[i].h) == true and object[i].kill == false) then
+			if dxgui_IsCursorOverElementWithChilds(object[i]) and not object[i].kill then
 				dxgui_Selection = object[i]
 				
 				dxgui_Selection.click(dxgui_Selection, down, x, y)
@@ -506,6 +580,7 @@ local function key(button, pressed)
 		if (button == "mouse_wheel_down") then
 			dir = 1
 		end
+		
 		
 		local obj = dxgui_GetCursorHoveringElementTable()
 		

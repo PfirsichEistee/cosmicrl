@@ -3,7 +3,7 @@ local edata = {}
 
 
 local syncdata = {
-	["Online"] = true, ["Money"] = true, ["Bankmoney"] = true, ["Adminlevel"] = true, ["Spawn"] = true, ["Playtime"] = true,
+	["Online"] = true, ["Money"] = true, ["Bankmoney"] = true, ["Adminlevel"] = true, ["Spawn"] = true, ["Playtime"] = true, ["PKW-Schein"] = true, ["LKW-Schein"] = true, ["Flugzeug-Schein"] = true, ["Helikopter-Schein"] = true,
 }
 
 local allsyncdata = {

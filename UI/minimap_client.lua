@@ -154,3 +154,6 @@ end
 function getMinimapW()
 	return mapW + space * 2
 end
+function getMinimapH()
+	return mapH + space * 2
+end

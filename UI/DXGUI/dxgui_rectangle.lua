@@ -6,7 +6,9 @@ local function draw(obj, delta)
 	
 	-- Draw objects
 	for a, b in ipairs(obj.child) do
-		b.draw(b, delta, obj.x, obj.y)
+		if b.visible then
+			b.draw(b, delta, obj.x, obj.y)
+		end
 	end
 	
 	
@@ -42,6 +44,7 @@ function dxgui_CreateRectangle(px, py, pw, ph, relative)
 		element = createElement("dxgui"),
 		kill = false,
 		enabled = true,
+		visible = true,
 		alpha = 0,
 		
 		-- Main functions

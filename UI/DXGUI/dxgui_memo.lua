@@ -29,6 +29,7 @@ function dxgui_CreateMemo(px, py, pw, ph, pText, relative, parent)
 		element = createElement("dxgui"),
 		kill = false,
 		enabled = true,
+		visible = true,
 		alpha = 0,
 		
 		-- Main functions
@@ -92,4 +93,9 @@ end
 
 function dxgui_MemoSetText(element, pText)
 	guiSetText(dxgui_GetElementTable(element).guielement, pText)
+end
+
+
+function dxgui_MemoGetGUI(element)
+	return dxgui_GetElementTable(element).guielement
 end

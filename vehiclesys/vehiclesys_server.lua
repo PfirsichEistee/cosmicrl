@@ -148,7 +148,7 @@ addEventHandler("onVehicleDamage", getRootElement(), stopVehicleDamage)]]
 
 
 local function deleteVehicleOnExplode()
-	if getElementData(source, "Owner") then
+	if source and getElementData(source, "Owner") then
 		local player = getPlayerFromName(getElementData(source, "Owner"))
 		
 		local ownerID = NameToID(getElementData(source, "Owner"))
@@ -162,6 +162,45 @@ local function deleteVehicleOnExplode()
 	end
 end
 addEventHandler("onVehicleExplode", getRootElement(), deleteVehicleOnExplode)
+
+
+local truckList = { 459, 482, 418, 413, 440, 416, 433, 427, 490, 528, 407, 544, 432, 601, 428, 431, 437, 408, 552, 499, 609, 498, 524, 532, 578, 486, 406, 573, 455, 588, 403, 423, 414, 443, 515, 514, 531, 456, 483, 508, }
+local function stopVehicleEnter(player)
+	if getElementType(player) == "player" then
+		local t = getVehicleType(source)
+		
+		if t == "Automobile" then
+			local model = getElementModel(source)
+			for a, b in ipairs(truckList) do
+				if b == model then
+					-- its a truck
+					if cosmicGetPlayerItem(player, getItemID("LKW Schein")) <= 0 then
+						triggerClientEvent(player, "infomsg", player, "Du hast keinen LKW Schein", 255, 100, 100)
+						cancelEvent()
+					end
+					return
+				end
+			end
+			
+			
+			-- its a car
+			if cosmicGetPlayerItem(player, getItemID("PKW Schein")) <= 0 then
+				triggerClientEvent(player, "infomsg", player, "Du hast keinen PKW Schein", 255, 100, 100)
+				cancelEvent()
+			end
+		elseif t == "Bike" and cosmicGetPlayerItem(player, getItemID("Motorrad Schein")) <= 0 then
+			triggerClientEvent(player, "infomsg", player, "Du hast keinen Motorrad Schein", 255, 100, 100)
+			cancelEvent()
+		elseif t == "Helicopter" and cosmicGetPlayerItem(player, getItemID("Helikopter Schein")) <= 0 then
+			triggerClientEvent(player, "infomsg", player, "Du hast keinen Helikopter Schein", 255, 100, 100)
+			cancelEvent()
+		elseif t == "Plane" and cosmicGetPlayerItem(player, getItemID("Flugzeug Schein")) <= 0 then
+			triggerClientEvent(player, "infomsg", player, "Du hast keinen Flugzeug Schein", 255, 100, 100)
+			cancelEvent()
+		end
+	end
+end
+addEventHandler("onVehicleStartEnter", getRootElement(), stopVehicleEnter)
 
 
 

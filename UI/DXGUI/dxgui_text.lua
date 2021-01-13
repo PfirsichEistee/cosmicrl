@@ -9,6 +9,13 @@ local function draw(obj, delta, plusX, plusY)
 	end
 	
 	
+	if obj.border then
+		dxDrawText(obj.text, x - 1, y - 1, x + obj.w - 1, y + obj.h - 1, tocolor(0, 0, 0, obj.a * obj.alpha), obj.fontScale, obj.font, obj.alignX, obj.alignY, obj.clip, obj.wordBreak, false, obj.colorCode)
+		dxDrawText(obj.text, x + 1, y - 1, x + obj.w + 1, y + obj.h - 1, tocolor(0, 0, 0, obj.a * obj.alpha), obj.fontScale, obj.font, obj.alignX, obj.alignY, obj.clip, obj.wordBreak, false, obj.colorCode)
+		dxDrawText(obj.text, x - 1, y + 1, x + obj.w - 1, y + obj.h + 1, tocolor(0, 0, 0, obj.a * obj.alpha), obj.fontScale, obj.font, obj.alignX, obj.alignY, obj.clip, obj.wordBreak, false, obj.colorCode)
+		dxDrawText(obj.text, x + 1, y + 1, x + obj.w + 1, y + obj.h + 1, tocolor(0, 0, 0, obj.a * obj.alpha), obj.fontScale, obj.font, obj.alignX, obj.alignY, obj.clip, obj.wordBreak, false, obj.colorCode)
+	end
+	
 	dxDrawText(obj.text, x, y, x + obj.w, y + obj.h, tocolor(obj.r, obj.g, obj.b, obj.a * obj.alpha), obj.fontScale, obj.font, obj.alignX, obj.alignY, obj.clip, obj.wordBreak, false, obj.colorCode)
 end
 
@@ -28,6 +35,7 @@ function dxgui_CreateText(px, py, pw, ph, pText, pFont, pFontScale, pAlignX, pAl
 		element = createElement("dxgui"),
 		kill = false,
 		enabled = true,
+		visible = true,
 		alpha = 0,
 		
 		-- Main functions
@@ -52,6 +60,7 @@ function dxgui_CreateText(px, py, pw, ph, pText, pFont, pFontScale, pAlignX, pAl
 		g = pg,
 		b = pb,
 		a = pa,
+		border = false,
 	}
 	
 	if not pFontScale then
@@ -106,4 +115,9 @@ end
 
 function dxgui_TextDefaultHeight(font)
 	return dxGetFontHeight(dxgui_TextDefaultScale(font), font)
+end
+
+
+function dxgui_TextSetBorder(element, state)
+	dxgui_GetElementTable(element).border = state
 end

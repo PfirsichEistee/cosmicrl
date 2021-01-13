@@ -1,5 +1,5 @@
 
-local defaultFontScale = (1 / dxGetFontHeight(1, dxgui_FontA)) * (0.025 * screenY)
+local defaultFontScale = (1 / dxGetFontHeight(1, dxgui_FontA)) * (0.015 * screenY)
 
 
 local function draw(obj, delta, plusX, plusY)
@@ -27,11 +27,11 @@ local function draw(obj, delta, plusX, plusY)
 	
 	local ph = (0.025 * (1 - obj.clickAnim))
 	
-	local fontMul = (1 / (obj.w - 0.025 * obj.w * 2)) * (obj.w - ph * obj.w * 2)
+	--local fontMul = (1 / (obj.w - 0.025 * obj.w * 2)) * (obj.w - ph * obj.w * 2)
 	
 	dxDrawRectangle(x + ph * obj.w, y + ph * obj.h, obj.w - ph * obj.w * 2, obj.h - ph * obj.h * 2, tocolor(130, 130 + 20 * obj.clickAnim, 160 + 40 * obj.clickAnim, 200 * obj.alpha + 55 * obj.hoverAnim))
-	dxDrawText(obj.text, x + ph * obj.w + 1.5, y + ph * obj.h + 1.5, x + obj.w - ph * obj.w + 1.5, y + obj.h - ph * obj.h + 1.5, tocolor(0, 0, 0, 255 * obj.alpha), obj.fontScale * fontMul, dxgui_FontA, "center", "center", true, false)
-	dxDrawText(obj.text, x + ph * obj.w, y + ph * obj.h, x + obj.w - ph * obj.w, y + obj.h - ph * obj.h, tocolor(255, 255, 255, 255 * obj.alpha), obj.fontScale * fontMul, dxgui_FontA, "center", "center", true, false)
+	dxDrawText(obj.text, x + ph * obj.w + 1.5, y + ph * obj.h + 1.5, x + obj.w - ph * obj.w + 1.5, y + obj.h - ph * obj.h + 1.5, tocolor(0, 0, 0, 255 * obj.alpha), obj.fontScale, dxgui_FontA, "center", "center", true, false)
+	dxDrawText(obj.text, x + ph * obj.w, y + ph * obj.h, x + obj.w - ph * obj.w, y + obj.h - ph * obj.h, tocolor(255, 255, 255, 255 * obj.alpha), obj.fontScale, dxgui_FontA, "center", "center", true, false)
 end
 
 local function click(obj, down, x, y)
@@ -50,6 +50,7 @@ function dxgui_CreateButton(px, py, pw, ph, pText, relative, parent)
 		element = createElement("dxgui"),
 		kill = false,
 		enabled = true,
+		visible = true,
 		alpha = 0,
 		
 		-- Main functions

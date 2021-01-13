@@ -1,7 +1,7 @@
 
 -- [spawnID] = { x, y, z, r, interior, dimension, }
 local spawnPoint = {
-	[0] = cmath.List(1743.1688, -1860.3788, 13.5788, 0, 0, 0 ), -- Noobspawn (Bahnhof LS)
+	[0] = cmath.List(-1967.2296142578, 116.44674682617, 27.6875, 0, 0, 0 ), -- Noobspawn (Bahnhof SF)
 }
 
 

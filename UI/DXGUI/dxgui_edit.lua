@@ -127,7 +127,7 @@ local function keyPressed(obj, key)
 		return
 	end
 	
-	if (string.len(key) > 1) then
+	if string.len(key) > 1 or obj.maxLength > 0 and string.len(obj.text) >= obj.maxLength then
 		return
 	end
 	
@@ -162,6 +162,7 @@ function dxgui_CreateEdit(px, py, pw, ph, pText, relative, parent)
 		element = createElement("dxgui"),
 		kill = false,
 		enabled = true,
+		visible = true,
 		alpha = 0,
 		
 		-- Main functions
@@ -183,6 +184,7 @@ function dxgui_CreateEdit(px, py, pw, ph, pText, relative, parent)
 		staySelected = true,
 		hidden = false,
 		onlyNumbers = false,
+		maxLength = -1,
 	}
 	
 	local t = nil
@@ -226,4 +228,14 @@ end
 
 function dxgui_EditSetOnlyNumbers(element, to)
 	dxgui_GetElementTable(element).onlyNumbers = to
+end
+
+
+function dxgui_EditSetMaxLength(element, value)
+	dxgui_GetElementTable(element).maxLength = value
+end
+
+
+function dxgui_EditGetMaxLength(element)
+	return dxgui_GetElementTable(element).maxLength
 end

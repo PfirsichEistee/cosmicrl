@@ -1,5 +1,5 @@
 <meta>
-	<info author="Kelox" name="Cosmic" type="gamemode"/>
+	<info author="Kelox" name="cosmicrl" type="gamemode"/>
 	
 	<script src="data/data_server.lua" type="server"/>
 	<script src="data/data_client.lua" type="client"/>
@@ -36,10 +36,11 @@
 	
 	<script src="UI/hud_client.lua" type="client"/>
 	<script src="UI/minimap_client.lua" type="client"/>
+	<script src="UI/gauge_client.lua" type="client"/>
 	
 	<script src="UI/infobox_client.lua" type="client"/>
 	
-	<script src="UI/nametags_client.lua" type="client"/>
+	<script src="UI/dxgui_preparation_grid.lua" type="client"/>
 	
 	
 	<!-- LOGIN -->
@@ -66,6 +67,20 @@
 	<script src="interior/carhouse/carhouse_server.lua" type="server"/>
 	<script src="interior/carhouse/carhouse_client.lua" type="client"/>
 	<script src="interior/carhouse/carhouse_shared.lua" type="shared"/>
+	
+	<script src="interior/townhall/townhall_server.lua" type="server"/>
+	<script src="interior/townhall/townhall_client.lua" type="client"/>
+	
+	
+	<!-- DRIVINGSCHOOL -->
+	<script src="drivingschool/drivingschool_server.lua" type="server"/>
+	<script src="drivingschool/drivingschool_speedwatch_client.lua" type="client"/>
+	
+	<script src="drivingschool/drivingschool_client.lua" type="client"/>
+	
+	<script src="drivingschool/exam/car_exam_server.lua" type="server"/>
+	<script src="drivingschool/exam/bike_exam_server.lua" type="server"/>
+	<script src="drivingschool/exam/truck_exam_server.lua" type="server"/>
 	
 	
 	<!-- INTERACTSYS -->
@@ -95,11 +110,19 @@
 	<file src="fonts/Monstercat.ttf"/>
 	
 	<file src="images/DXGUI/InventorySelection.png"/>
+	<file src="images/DXGUI/dropdown.png"/>
 	
 	<file src="images/login/lock.png"/>
 	<file src="images/login/cake.png"/>
 	<file src="images/login/user.png"/>
 	<file src="images/login/gender.png"/>
+	
+	<file src="images/drivingschool/test1.jpg"/>
+	<file src="images/drivingschool/test2.jpg"/>
+	<file src="images/drivingschool/test3.jpg"/>
+	<file src="images/drivingschool/test4.jpg"/>
+	<file src="images/drivingschool/test5.jpg"/>
+	<file src="images/drivingschool/test6.jpg"/>
 	
 	<file src="images/hud/0.png"/>
 	<file src="images/hud/1.png"/>
@@ -145,6 +168,12 @@
 	<file src="images/hud/45.png"/>
 	<file src="images/hud/46.png"/>
 	<file src="images/hud/star.png"/>
+	<file src="images/hud/speed-bg.png"/>
+	<file src="images/hud/speed-needle.png"/>
+	<file src="images/hud/fuel-bg.png"/>
+	<file src="images/hud/fuel-needle.png"/>
+	<file src="images/hud/dmg.png"/>
+	<file src="images/hud/blood.png"/>
 	
 	<file src="images/map/map.jpg"/>
 	<file src="images/map/0-1.png"/>
@@ -221,13 +250,12 @@
 	<file src="images/items/sprunk.png"/>
 	<file src="images/items/weed.png"/>
 	<file src="images/items/weedseeds.png"/>
-	
-	<file src="images/else/admin1.png"/>
-	<file src="images/else/admin2.png"/>
-	<file src="images/else/admin3.png"/>
-	<file src="images/else/admin4.png"/>
-	<file src="images/else/admin5.png"/>
-	<file src="images/else/admin6.png"/>
-	<file src="images/else/admin7.png"/>
-	<file src="images/else/admin8.png"/>
+	<file src="images/items/card.png"/>
+	<file src="images/items/card_car.png"/>
+	<file src="images/items/card_bike.png"/>
+	<file src="images/items/card_truck.png"/>
+	<file src="images/items/card_heli.png"/>
+	<file src="images/items/card_plane.png"/>
+	<file src="images/items/card_gunA.png"/>
+	<file src="images/items/card_gunB.png"/>
 </meta>

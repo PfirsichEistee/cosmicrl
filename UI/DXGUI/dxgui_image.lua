@@ -9,7 +9,7 @@ local function draw(obj, delta, plusX, plusY)
 	end
 	
 	
-	dxDrawImage(x, y, obj.w, obj.h, obj.image, 0, 0, 0, tocolor(255, 255, 255, 255 * obj.alpha))
+	dxDrawImage(x, y, obj.w, obj.h, obj.image, 0, 0, 0, tocolor(obj.r, obj.g, obj.b, obj.a * obj.alpha))
 end
 
 local function click(obj, down, x, y)
@@ -28,6 +28,7 @@ function dxgui_CreateImage(px, py, pw, ph, pImage, relative, parent)
 		element = createElement("dxgui"),
 		kill = false,
 		enabled = true,
+		visible = true,
 		alpha = 0,
 		
 		-- Main functions
@@ -41,6 +42,10 @@ function dxgui_CreateImage(px, py, pw, ph, pImage, relative, parent)
 		
 		-- "class"-specific values
 		image = pImage,
+		r = 255,
+		g = 255,
+		b = 255,
+		a = 255,
 	}
 	
 	local t = nil

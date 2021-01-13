@@ -5,6 +5,7 @@ function dxgui_CreateCustom(px, py, pw, ph, draw, click, drag, scroll, relative,
 		element = createElement("dxgui"),
 		kill = false,
 		enabled = true,
+		visible = true,
 		alpha = 0,
 		
 		-- Main functions

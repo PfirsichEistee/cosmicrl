@@ -46,6 +46,7 @@ function dxgui_CreateCheckBox(px, py, pw, ph, pText, relative, parent)
 		element = createElement("dxgui"),
 		kill = false,
 		enabled = true,
+		visible = true,
 		alpha = 0,
 		
 		-- Main functions

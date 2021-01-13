@@ -8,7 +8,9 @@ local function draw(obj, delta)
 	
 	-- Draw objects
 	for a, b in ipairs(obj.child) do
-		b.draw(b, delta, obj.x, obj.y)
+		if b.visible then
+			b.draw(b, delta, obj.x, obj.y)
+		end
 	end
 	
 	
@@ -76,6 +78,7 @@ function dxgui_CreateWindow(px, py, pw, ph, pTitle, relative)
 	local new = {
 		element = createElement("dxgui"),
 		kill = false,
+		visible = true,
 		alpha = 0,
 		
 		-- Main functions

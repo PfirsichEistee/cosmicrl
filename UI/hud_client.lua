@@ -27,6 +27,25 @@ local plus = 0.01 * phW
 phX = phX - space * 2
 phY = space * 2
 
+local lastPlayerHP = -1
+local dmgAnim = 0
+local bloodAnim = 0
+local deathAnim = 0
+
+
+local minigame = {
+	pixsize = (screenY / 4) * 3,
+	size = 25,
+	snake = {},
+	foodX = 1,
+	foodY = 1,
+	dirX = 1,
+	dirY = 0,
+	timer = 0,
+	reset = true,
+	active = false,
+}
+
 
 
 local function hudRect(x, y, w, h, r, g, b, mul)
@@ -47,9 +66,47 @@ end
 
 
 local function render()
-	if not visible or isPedDead(lp) then
+	if getElementHealth(lp) < lastPlayerHP then
+		dmgAnim = 1
+	end
+	if lastPlayerHP > 0 and getElementHealth(lp) <= 0 then
+		bloodAnim = 1
+	end
+	lastPlayerHP = getElementHealth(lp)
+	
+	if deathAnim > 0 then
+		dxDrawRectangle(0, 0, screenX, screenY, tocolor(0, 0, 0, 255 * deathAnim))
+	end
+	if dmgAnim > 0 then
+		dmgAnim = dmgAnim - delta * 3
+		if dmgAnim < 0 then
+			dmgAnim = 0
+		end
+		
+		dxDrawImage(0, 0, screenX, screenY, "images/hud/dmg.png", 0, 0, 0, tocolor(255, 255, 255, 255 * dmgAnim))
+	end
+	if bloodAnim > 0 then
+		bloodAnim = bloodAnim - delta * 0.1
+		if bloodAnim < 0 then
+			bloodAnim = 0
+		end
+		
+		dxDrawImage(0, 0, screenX, screenY, "images/hud/blood.png", 0, 0, 0, tocolor(255, 255, 255, 255 * bloodAnim))
+	end
+	
+	
+	
+	if not visible then
+		return
+	elseif isPedDead(lp) then
+		deathAnim = cmath.move_towards(deathAnim, 1, delta * 5)
+		drawWasted()
+		
 		return
 	end
+	deathAnim = cmath.move_towards(deathAnim, 0, delta * 5)
+	minigame.reset = true
+	minigame.active = false
 	
 	
 	dxDrawImage(phX, phY, imgSize, imgSize, "images/hud/" .. getPedWeapon(lp) .. ".png")
@@ -97,6 +154,7 @@ local function render()
 	
 	
 	drawMinimap()
+	drawGauge()
 	
 	
 	-- DEVELOPMENT
@@ -131,6 +189,150 @@ local function debugPrintShitTestRemoveLater()
 	outputChatBox(rx .. ", " .. ry .. ", " .. rz)
 end
 addCommandHandler("dp", debugPrintShitTestRemoveLater)
+
+
+
+local function square(x, y, color)
+	local px = (screenX - minigame.pixsize) / 2
+	local py = (screenY - minigame.pixsize) / 2
+	dxDrawRectangle(px + (minigame.pixsize / minigame.size) * x, py + (minigame.pixsize / minigame.size) * y, minigame.pixsize / minigame.size, minigame.pixsize / minigame.size, color)
+end
+
+local function isSnakeAt(x, y)
+	for a, b in ipairs(minigame.snake) do
+		if b.x == x and b.y == y then
+			return true
+		end
+	end
+	return false
+end
+
+function drawWasted()
+	--dxDrawRectangle(0, 0, screenX, screenY, tocolor(0, 0, 0, 255))
+	
+	dxDrawText("wasted.", 0, 0, screenX, screenY, tocolor(255, 0, 0, 255), 3, "pricedown", "center", "center")
+	
+	
+	-- minigame
+	if not minigame.active then
+		return
+	end
+	if minigame.reset then
+		minigame.reset = false
+		
+		minigame.snake = {
+			[1] = {
+				x = math.floor(minigame.size / 2),
+				y = math.floor(minigame.size / 2),
+			},
+		}
+		
+		minigame.foodX = math.floor(math.random() * minigame.size)
+		minigame.foodY = math.floor(math.random() * minigame.size)
+	end
+	
+	
+	local px = (screenX - minigame.pixsize) / 2
+	local py = (screenY - minigame.pixsize) / 2
+	dxDrawLine(px, py, px + minigame.pixsize, py, tocolor(255, 0, 0, 255))
+	dxDrawLine(px, py + minigame.pixsize, px + minigame.pixsize, py + minigame.pixsize, tocolor(255, 0, 0, 255))
+	dxDrawLine(px, py, px, py + minigame.pixsize, tocolor(255, 0, 0, 255))
+	dxDrawLine(px + minigame.pixsize, py, px + minigame.pixsize, py + minigame.pixsize, tocolor(255, 0, 0, 255))
+	
+	square(minigame.foodX, minigame.foodY, tocolor(190, 0, 0, 180))
+	
+	
+	if minigame.timer <= 0 then
+		local phX = minigame.snake[1].x + minigame.dirX
+		local phY = minigame.snake[1].y + minigame.dirY
+		
+		if phX == minigame.foodX and phY == minigame.foodY then
+			local ph = minigame.snake[#minigame.snake]
+			
+			for i = #minigame.snake, 2, -1 do
+				minigame.snake[i] = minigame.snake[i - 1]
+			end
+			
+			table.insert(minigame.snake, ph)
+			
+			minigame.snake[1] = {
+				x = minigame.foodX,
+				y = minigame.foodY,
+			}
+			
+			for i = 1, 5000, 1 do
+				minigame.foodX = math.floor(math.random() * minigame.size)
+				minigame.foodY = math.floor(math.random() * minigame.size)
+				
+				local found = false
+				for a, b in ipairs(minigame.snake) do
+					if minigame.foodX == b.x and minigame.foodY == b.y then
+						found = true
+						break
+					end
+				end
+				
+				if not found then
+					break
+				end
+			end
+		else
+			for i = #minigame.snake, 2, -1 do
+				minigame.snake[i].x = minigame.snake[i - 1].x
+				minigame.snake[i].y = minigame.snake[i - 1].y
+			end
+			
+			if isSnakeAt(minigame.snake[1].x + minigame.dirX, minigame.snake[1].y + minigame.dirY) then
+				minigame.reset = true
+			end
+			
+			minigame.snake[1].x = minigame.snake[1].x + minigame.dirX
+			minigame.snake[1].y = minigame.snake[1].y + minigame.dirY
+			if minigame.snake[1].x < 0 then
+				minigame.snake[1].x = minigame.size - 1
+			elseif minigame.snake[1].x >= minigame.size then
+				minigame.snake[1].x = 0
+			elseif minigame.snake[1].y < 0 then
+				minigame.snake[1].y = minigame.size - 1
+			elseif minigame.snake[1].y >= minigame.size then
+				minigame.snake[1].y = 0
+			end
+		end
+		
+		minigame.timer = 0.05
+	else
+		minigame.timer = minigame.timer - delta
+	end
+	
+	for a, b in ipairs(minigame.snake) do
+		square(b.x, b.y, tocolor(255, 255, 255, 180))
+	end
+end
+
+local function startMinigame(key, down)
+	if not minigame.active and bloodAnim <= 0.5 then
+		minigame.active = true
+	end
+	
+	if down and minigame.snake[1] ~= nil then
+		if key == "w" and not isSnakeAt(minigame.snake[1].x, minigame.snake[1].y - 1) then
+			minigame.dirX = 0
+			minigame.dirY = -1
+		elseif key == "a" and not isSnakeAt(minigame.snake[1].x - 1, minigame.snake[1].y) then
+			minigame.dirX = -1
+			minigame.dirY = 0
+		elseif key == "s" and not isSnakeAt(minigame.snake[1].x, minigame.snake[1].y + 1) then
+			minigame.dirX = 0
+			minigame.dirY = 1
+		elseif key == "d" and not isSnakeAt(minigame.snake[1].x + 1, minigame.snake[1].y) then
+			minigame.dirX = 1
+			minigame.dirY = 0
+		end
+	end
+end
+addEventHandler("onClientKey", getRootElement(), startMinigame)
+
+
 
 
 

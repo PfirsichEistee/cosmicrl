@@ -121,6 +121,34 @@ local function List(...)
 end
 
 
+local function getElementSpeed(element)
+	-- getElementVelocity: The returned values are expressed in GTA units per 1/50th of a second. A GTA Unit is equal to one metre
+	
+	-- return: Speed in m/s
+	
+	return dist3D(0, 0, 0, getElementVelocity(element)) / (1 / 50)
+end
+
+
+local function getAngle3D(x1, y1, z1, x2, y2, z2)
+	-- cos(q) = ( a * b ) / ( |a|*|b| )
+	local ph1 = math.sqrt(x1 * x1 + y1 * y1 + z1 * z1)
+	local ph2 = math.sqrt(x2 * x2 + y2 * y2 + z2 * z2)
+	
+	local ab = x1 * x2 + y1 * y2 + z1 * z2
+	
+	return math.acos(ab / (ph1 * ph2))
+end
+
+
+local function round(value)
+	if (value - math.floor(value)) < 0.5 then
+		return math.floor(value)
+	end
+	return math.ceil(value)
+end
+
+
 cmath = {
 	move_towards = move_towards,
 	clamp = clamp,
@@ -134,4 +162,6 @@ cmath = {
 	lerp3D = lerp3D,
 	List = List,
 	dirToAngle = dirToAngle,
+	getElementSpeed = getElementSpeed,
+	getAngle3D = getAngle3D,
 }
