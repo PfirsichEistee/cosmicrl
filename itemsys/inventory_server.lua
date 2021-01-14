@@ -130,8 +130,8 @@ function cosmicLoadPlayerInventory(userID)
 end
 
 
-local function unloadAndSavePlayerInventory()
-	local id = NameToID(getPlayerName(source))
+function cosmicUnloadAndSavePlayerInventory(player)
+	local id = NameToID(getPlayerName(player))
 	
 	if inv[id] then
 		local str = ""
@@ -150,4 +150,3 @@ local function unloadAndSavePlayerInventory()
 		inv[id] = nil
 	end
 end
-addEventHandler("onPlayerExit", getRootElement(), unloadAndSavePlayerInventory)

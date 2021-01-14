@@ -32,3 +32,9 @@ function cosmicGetElementData(element, name)
 		return edata[element][name]
 	end
 end
+
+function cosmicClearElementData(element)
+	if edata[element] then
+		edata[element] = nil
+	end
+end

@@ -25,6 +25,7 @@
 	<script src="UI/DXGUI/dxgui_button.lua" type="client"/>
 	<script src="UI/DXGUI/dxgui_edit.lua" type="client"/>
 	<script src="UI/DXGUI/dxgui_memo.lua" type="client"/>
+	<script src="UI/DXGUI/dxgui_memo_alt.lua" type="client"/>
 	<script src="UI/DXGUI/dxgui_text.lua" type="client"/>
 	<script src="UI/DXGUI/dxgui_gridlist.lua" type="client"/>
 	<script src="UI/DXGUI/dxgui_inventory.lua" type="client"/>
@@ -176,6 +177,10 @@
 	<file src="images/hud/blood.png"/>
 	
 	<file src="images/map/map.jpg"/>
+	<file src="images/map/noise1.png"/>
+	<file src="images/map/noise2.png"/>
+	<file src="images/map/noise3.png"/>
+	<file src="images/map/noise4.png"/>
 	<file src="images/map/0-1.png"/>
 	<file src="images/map/0-2.png"/>
 	<file src="images/map/0-3.png"/>

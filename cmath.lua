@@ -1,4 +1,13 @@
 
+local function round(num)
+	if (num - math.floor(num)) < 0.5 then
+		return math.floor(num)
+	else
+		return math.ceil(num)
+	end
+end
+
+
 local function clamp(num, mini, maxi)
 	if (num < mini) then
 		return mini
@@ -149,7 +158,38 @@ local function round(value)
 end
 
 
+local function getStringMaxRows(str)
+	local ph, rows = string.gsub(str, "\n", "\n")
+	
+	return rows + 1
+end
+
+
+local function getStringRowStartAndEnd(str, row)
+	local startChar = 1
+	local endChar = string.find(str, "\n", startChar)
+	
+	for i = 1, (row - 1), 1 do
+		startChar = string.find(str, "\n", startChar) + 1
+		endChar = string.find(str, "\n", startChar)
+	end
+	
+	if endChar then
+		return startChar, endChar - 1
+	else
+		return startChar
+	end
+end
+
+
+local function getStringRow(str, row)
+	local s, e = getStringRowStartAndEnd(str, row)
+	return string.sub(str, getStringRowStartAndEnd(str, row))
+end
+
+
 cmath = {
+	round = round,
 	move_towards = move_towards,
 	clamp = clamp,
 	isPointInRect = isPointInRect,
@@ -164,4 +204,7 @@ cmath = {
 	dirToAngle = dirToAngle,
 	getElementSpeed = getElementSpeed,
 	getAngle3D = getAngle3D,
+	getStringMaxRows = getStringMaxRows,
+	getStringRowStartAndEnd = getStringRowStartAndEnd,
+	getStringRow = getStringRow,
 }

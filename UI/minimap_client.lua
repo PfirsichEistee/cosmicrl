@@ -17,6 +17,9 @@ local secH = (mapH / mapW) * secW
 
 local tarSecW = 600
 
+local noiseIndex = 1
+local noiseTimer = 0.13
+
 
 
 local function worldToMinimap(x, y)
@@ -26,6 +29,24 @@ end
 
 -- .. is being called by hud_client.lua
 function drawMinimap()
+	-- draw noise
+	if getElementInterior(getLocalPlayer()) ~= 0 then
+		dxDrawRectangle(mapX - space, mapY - space, mapW + space * 2, mapH + space * 2, tocolor(0, 0, 0, 125))
+		dxDrawImage(mapX, mapY, mapW, mapH, "images/map/noise" .. noiseIndex .. ".png")
+		
+		noiseTimer = noiseTimer - delta
+		
+		if noiseTimer <= 0 then
+			noiseTimer = 0.13
+			noiseIndex = noiseIndex + 1
+			if noiseIndex > 4 then
+				noiseIndex = 1
+			end
+		end
+		return
+	end
+	
+	
 	local e = getPedOccupiedVehicle(lp)
 	if not e then
 		e = lp

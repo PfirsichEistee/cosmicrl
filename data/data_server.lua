@@ -37,6 +37,19 @@ end
 addEventHandler("onResourceStart", resourceRoot, dataResourceStart)
 
 
+local function dataPlayerLeave()
+	outputDebugString("Player '" .. getPlayerName(source) .. "' left. Saving data...", 4, 255, 0, 0)
+	cosmicUnloadAndSavePlayerInventory(source)
+	
+	dbExec(dbHandler, "UPDATE playerdata SET Adminlevel=?, Spawn=?, Money=?, Bankmoney=?, Skin=?, Playtime=? WHERE id=" .. NameToID(getPlayerName(source)),
+		cosmicGetElementData(source, "Adminlevel"), cosmicGetElementData(source, "Spawn"), cosmicGetElementData(source, "Money"), cosmicGetElementData(source, "Bankmoney"), cosmicGetElementData(source, "Skin"), cosmicGetElementData(source, "Playtime"))
+	
+	cosmicClearElementData(source)
+end
+addEventHandler("onPlayerQuit", getRootElement(), dataPlayerLeave)
+
+
+
 
 function NameToID(name)
 	return playerID[name]

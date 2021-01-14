@@ -5,17 +5,6 @@ addEvent("getLoginData", true)
 
 
 
-
-local function oldPlayerJoin(player)
-	triggerClientEvent(player, "clientStartLogin", player)
-end
-
-
-local function newPlayerJoin(player)
-	triggerClientEvent(player, "clientStartRegister", player)
-end
-
-
 local function checkPlayer()
 	cosmicSetElementData(client, "Online", false)
 	triggerClientEvent(client, "clearChat", client)
@@ -26,14 +15,14 @@ local function checkPlayer()
 		if #result > 0 then -- Player exists already
 			for i = 1, #result, 1 do
 				if result[i]["Username"] == getPlayerName(client) then
-					oldPlayerJoin(client)
+					triggerClientEvent(client, "clientStartLogin", client)
 					return
 				end
 			end
 			
 			kickPlayer(client, "Du hast bereits einen anderen Account unter dem Namen \"" .. result[1]["Username"] .. "\"")
 		else -- New player joined
-			newPlayerJoin(client)
+			triggerClientEvent(client, "clientStartRegister", client)
 		end
 	end
 end

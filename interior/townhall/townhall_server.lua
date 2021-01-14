@@ -39,6 +39,31 @@ end
 addEventHandler("onMarkerHit", enterMarker, enterTownhall)
 
 
+local function exitTownhall(player, matchingDimension)
+	if getElementType(player) == "player" and matchingDimension and not getPedOccupiedVehicle(player) then
+		setElementFrozen(player, true)
+		fadeCamera(player, false)
+		
+		setTimer(function()
+			setElementFrozen(player, false)
+			fadeCamera(player, true)
+			
+			setElementInterior(player, 0, -2763.3454589844, 375.54272460938, 5.9993019104004)
+			setElementRotation(player, 0, 0, 270)
+			
+			toggleControl(player, "action", true)
+			toggleControl(player, "fire", true)
+			toggleControl(player, "aim_weapon", true)
+			toggleControl(player, "previous_weapon", true)
+			toggleControl(player, "sprint", true)
+			toggleControl(player, "jump", true)
+			toggleControl(player, "crouch", true)
+		end, 1000, 1)
+	end
+end
+addEventHandler("onMarkerHit", exitMarker, exitTownhall)
+
+
 local function townhallBuy(license)
 	if cosmicGetPlayerItem(client, getItemID(license)) > 0 then
 		triggerClientEvent(client, "infobox", client, "Diesen Schein hast du bereits!", 5, 255, 100, 100)
