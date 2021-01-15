@@ -15,6 +15,7 @@ local itemTex = {
 	[13] = "images/items/card.png",
 	[14] = "images/items/card_gunA.png",
 	[15] = "images/items/card_gunB.png",
+	[16] = "images/items/stone.png",
 }
 
 

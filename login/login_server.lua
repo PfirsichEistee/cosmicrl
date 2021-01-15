@@ -6,6 +6,12 @@ addEvent("getLoginData", true)
 
 
 local function checkPlayer()
+	local ed = getAllElementData(client)
+	for a, b in pairs(ed) do
+		removeElementData(client, a)
+	end
+	
+	
 	cosmicSetElementData(client, "Online", false)
 	triggerClientEvent(client, "clearChat", client)
 	
@@ -93,16 +99,27 @@ local function registerPlayer(password, day, month, year, gender)
 		
 		
 		-- Create playerdata
+		local skinlist = {
+			[1] = { -- male
+				1, 2, 7, 14, 15, 20, 21, 22, 23, 24, 25, 26, 28, 29, 30, 32, 34, 35, 36, 37, 44,
+			},
+			[2] = { -- female
+				9, 10, 11, 12, 13, 31, 38, 39, 40, 41, 53, 54, 55, 56, 63, 64, 69, 75,
+			},
+		}
+		
+		local ph = math.ceil(math.random() * #skinlist[gender])
+		
 		local start = {
 			admin = 0,
 			spawn = 0,
 			money = 75,
 			bankmoney = 1300,
-			skin = 5,
+			skin = skinlist[gender][ph],
 			playtime = 0,
 		}
 		
-		dbExec(dbHandler, "INSERT INTO playerdata (ID, Adminlevel, Spawn, Money, Bankmoney, Skin, Playtime) VALUES (?, ?, ?, ?, ?, ?, ?)", newID, start.admin, start.spawn, start.money, start.bankmoney, start.skin, start.playtime, start.pkw, start.lkw, start.flugzeug, start.helikopter)
+		dbExec(dbHandler, "INSERT INTO playerdata (ID, Adminlevel, Spawn, Money, Bankmoney, Skin, Playtime) VALUES (?, ?, ?, ?, ?, ?, ?)", newID, start.admin, start.spawn, start.money, start.bankmoney, start.skin, start.playtime)
 		
 		dbExec(dbHandler, "INSERT INTO inventory (ID, Items) VALUES (?, ?)", newID, "")
 		cosmicLoadPlayerInventory(newID)

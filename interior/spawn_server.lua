@@ -10,7 +10,7 @@ function cosmicSpawnPlayer(player, id)
 		id = cosmicGetElementData(player, "Spawn")
 	end
 	
-	spawnPlayer(player, spawnPoint[id][1], spawnPoint[id][2], spawnPoint[id][3], spawnPoint[id][4], 16, spawnPoint[id][5], spawnPoint[id][6])
+	spawnPlayer(player, spawnPoint[id][1], spawnPoint[id][2], spawnPoint[id][3], spawnPoint[id][4], cosmicGetElementData(player, "Skin"), spawnPoint[id][5], spawnPoint[id][6])
 	--setElementInterior(player, spawnPoint[id][5])
 	--setElementDimension(player, spawnPoint[id][6])
 	--setElementPosition(player, spawnPoint[id][1], spawnPoint[id][2], spawnPoint[id][3])

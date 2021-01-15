@@ -1,5 +1,14 @@
 
---addEvent("playerOpenInventory", true)
+--[[
+Item-usage is handled by many different scripts. Only a few general items can be found here.
+Example: If you use a job-specific item, the according job-script will catch the event and do something
+On the other hand, if you use "general" items, such as hamburgers, the event is handled in here
+]]
+
+addEvent("playerUseItem", true) -- ^^^ read above ^^^
+addEvent("playerDropItem", true)
+addEvent("playerTrashItem", true)
+
 
 local inv = {}
 -- inv[USER ID] = { ..... }
@@ -90,6 +99,7 @@ function cosmicAddPlayerItem(player, itemID, itemAmount)
 			return true
 		end
 	end
+	return false
 end
 
 

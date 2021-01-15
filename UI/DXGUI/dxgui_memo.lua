@@ -3,6 +3,8 @@ local activeRenderTargets = {}
 local dragSpace = titleHeight * 0.3
 local fontSize = (1 / dxGetFontHeight(1, dxgui_FontA)) * dragSpace * 1.965
 
+local clipboard = ""
+
 --[[
 dxGetFontHeight is supposed to return a value which is 1.75 * the actual pixel size, but it doesnt look like that in my case?
 The returned height is the nearly exact pixel height, but is slightly off by a factor of about ~0.03
@@ -56,11 +58,7 @@ local function getScrollPercentX(obj)
 	
 	
 	-- percent
-	if phW == 0 then
-		return 0
-	else
-		return (1 / -phW) * obj.scrollX
-	end
+	return (1 / -phW) * obj.scrollX
 end
 local function setScrollPercentX(obj, perc)
 	local phW = dxGetTextWidth(obj.text, fontSize, dxgui_FontA, false) + dragSpace
@@ -287,6 +285,9 @@ local function keyPressed(obj, key)
 	-- key=0 -> enter
 	-- key=1 -> backspace
 	
+	local percX = getScrollPercentX(obj)
+	local percY = getScrollPercentY(obj)
+	
 	
 	if key ~= 0 and key ~= 1 then -- enter letter
 		-- swap selection-points if necessary
@@ -300,17 +301,16 @@ local function keyPressed(obj, key)
 		local ps, pe = getSelectionChar(obj)
 		
 		if pe then
-			obj.scrollX = obj.scrollX + dxGetTextWidth(string.sub(obj.text, ps, pe), fontSize, dxgui_FontA)
-			
 			obj.text = string.sub(obj.text, 1, ps - 1) .. string.sub(obj.text, pe + 1)
 		end
 		
-		if ps >= string.len(obj.text) then
+		if ps == (string.len(obj.text) + 1) then
 			obj.text = obj.text .. key
-			
-			obj.scrollX = obj.scrollX - dxGetTextWidth(key, fontSize, dxgui_FontA)
 		else
 			obj.text = string.sub(obj.text, 1, ps - 1) .. key .. string.sub(obj.text, ps)
+			
+			obj.scrollX = obj.scrollX - dxGetTextWidth(key, fontSize, dxgui_FontA)
+			percX = getScrollPercentX(obj)
 		end
 		obj.sel[1].x = obj.sel[1].x + 1
 		
@@ -325,7 +325,7 @@ local function keyPressed(obj, key)
 	else
 		if key == 0 then -- enter
 			keyPressed(obj, "\n")
-			obj.scrollY = obj.scrollY - dragSpace * 2
+			percX = 0
 		elseif key == 1 then -- backspace
 			-- swap selection-points if necessary
 			if obj.sel[2] and obj.sel[1].y > obj.sel[2].y or obj.sel[1].y == obj.sel[2].y and obj.sel[1].x > obj.sel[2].x then
@@ -359,12 +359,11 @@ local function keyPressed(obj, key)
 	end
 	
 	
-	
-	local percX = getScrollPercentX(obj)
-	local percY = getScrollPercentY(obj)
-	
-	if percY ~= perY then
-		perY = 0
+	if percX ~= percX then
+		percX = 0
+	end
+	if percY ~= percY then
+		percY = 0
 	end
 	
 	
@@ -513,12 +512,24 @@ end
 
 
 function dxgui_MemoGetText(element)
-	return guiGetText(dxgui_GetElementTable(element).guielement)
+	local ph = dxgui_GetElementTable(element)
+	
+	if ph.guielement then
+		return guiGetText(ph.guielement)
+	else
+		return ph.text
+	end
 end
 
 
 function dxgui_MemoSetText(element, pText)
-	guiSetText(dxgui_GetElementTable(element).guielement, pText)
+	local ph = dxgui_GetElementTable(element)
+	
+	if ph.guielement then
+		guiSetText(ph.guielement, pText)
+	else
+		ph.text = pText
+	end
 end
 
 
@@ -547,11 +558,45 @@ end
 addEventHandler("onClientElementDestroy", getRootElement(), killRenderTarget)
 
 
-
-
-local function test()
-	outputChatBox("testchareat")
-	dxgui_CreateMemo(300, 100, 400, 400, "Test\nthis\ncrap oh crap i dont know if it works uwu shit go\nok i think", false, nil)
-	dxgui_CreateMemo(800, 100, 400, 400, "Test", false, nil)
+local function copyPasteSelection(key, pressed)
+	if key == "c" and pressed and getKeyState("lctrl") then
+		if dxgui_Selection and dxgui_Selection.sel and dxgui_Selection.sel[2] then
+			if dxgui_Selection.sel[2] and dxgui_Selection.sel[1].y > dxgui_Selection.sel[2].y or dxgui_Selection.sel[1].y == dxgui_Selection.sel[2].y and dxgui_Selection.sel[1].x > dxgui_Selection.sel[2].x then
+				local ph = dxgui_Selection.sel[2]
+				dxgui_Selection.sel[2] = dxgui_Selection.sel[1]
+				dxgui_Selection.sel[1] = ph
+			end
+			
+			local ps, pe = getSelectionChar(dxgui_Selection)
+			
+			if pe then
+				clipboard = string.sub(dxgui_Selection.text, ps, pe)
+				setClipboard(clipboard)
+				infomsg("Auswahl kopiert", 255, 255, 255)
+			end
+		end
+	elseif key == "v" and pressed and getKeyState("lctrl") then
+		if dxgui_Selection and dxgui_Selection.sel then
+			if dxgui_Selection.sel[2] then
+				if dxgui_Selection.sel[1].y > dxgui_Selection.sel[2].y or dxgui_Selection.sel[1].y == dxgui_Selection.sel[2].y and dxgui_Selection.sel[1].x > dxgui_Selection.sel[2].x then
+					local ph = dxgui_Selection.sel[2]
+					dxgui_Selection.sel[2] = dxgui_Selection.sel[1]
+					dxgui_Selection.sel[1] = ph
+				end
+				
+				local ps, pe = getSelectionChar(dxgui_Selection)
+			
+				if pe then
+					dxgui_Selection.text = string.sub(dxgui_Selection.text, 1, ps - 1) .. string.sub(dxgui_Selection.text, pe + 1)
+				end
+				
+				dxgui_Selection.sel[2] = dxgui_Selection.sel[1]
+			end
+			
+			for i = 1, string.len(clipboard), 1 do
+				keyPressed(dxgui_Selection, string.sub(clipboard, i, i))
+			end
+		end
+	end
 end
-addEventHandler("onClientResourceStart", resourceRoot, test)
+addEventHandler("onClientKey", getRootElement(), copyPasteSelection)

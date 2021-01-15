@@ -24,6 +24,7 @@ local itemList = {
 	[13] = "Personalausweis",
 	[14] = "Waffenschein (leicht)",
 	[15] = "Waffenschein (schwer)",
+	[16] = "Stein",
 }
 
 

@@ -34,8 +34,9 @@ end
 
 
 local function invClick()
+	local item = dxgui_InventoryGetSelectedItem(gui["inv"])
 	if source == gui["use"] then
-		
+		triggerServerEvent("playerUseItem", getLocalPlayer(), item.id)
 	elseif source == gui["drop"] then
 		
 	elseif source == gui["trash"] then
@@ -82,6 +83,7 @@ local function openInventory()
 	gui["close"] = dxgui_CreateButton(space, winH - titleHeight - space, btnW, titleHeight, "Schliessen", false, gui["window"])
 	
 	
+	addEventHandler("onDXGUIClicked", gui["use"], invClick)
 	addEventHandler("onDXGUIClicked", gui["inv"], updateInvTitle)
 	addEventHandler("onDXGUIClicked", gui["close"], closeInventory)
 	

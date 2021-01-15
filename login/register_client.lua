@@ -33,9 +33,9 @@ local function confirmRegister()
 				
 				if d and m and y then
 					if d >= 1 and d <= 31 and m >= 1 and m <= 12 and y >= 1900 and y <= 2020 then
-						local gender = 0 -- male
+						local gender = 1 -- male
 						if dxgui_CheckBoxGetState(regGui["female"]) then
-							gender = 1
+							gender = 2
 						end
 						
 						triggerServerEvent("getRegisterData", getLocalPlayer(), hash("sha256", pw), d, m, y, gender)

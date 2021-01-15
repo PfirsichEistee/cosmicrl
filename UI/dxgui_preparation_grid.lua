@@ -13,6 +13,13 @@ end
 
 
 function dxgui_prep_startColumns(parent, space, titleH, ...)
+	if not space then
+		space = titleHeight * 0.1
+	end
+	if not titleH then
+		titleH = titleHeight
+	end
+	
 	parent = dxgui_GetElementTable(parent)
 	local args = {...} -- total of args must equal 1 !!!
 	

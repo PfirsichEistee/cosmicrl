@@ -73,6 +73,24 @@
 	<script src="interior/townhall/townhall_client.lua" type="client"/>
 	
 	
+	<!-- ITEMSYS -->
+	<script src="itemsys/items_shared.lua" type="shared"/>
+	<script src="itemsys/items_server.lua" type="server"/>
+	<script src="itemsys/items_client.lua" type="client"/>
+	
+	<script src="itemsys/inventory_server.lua" type="server"/>
+	<script src="itemsys/inventory_client.lua" type="client"/>
+	
+	
+	<!-- JOBS -->
+	<script src="jobs/general_shared.lua" type="shared"/>
+	<script src="jobs/general_server.lua" type="server"/>
+	<script src="jobs/general_client.lua" type="client"/>
+	
+	<script src="jobs/constructionworker/constructionworker_server.lua" type="server"/>
+	<script src="jobs/constructionworker/constructionworker_client.lua" type="client"/>
+	
+	
 	<!-- DRIVINGSCHOOL -->
 	<script src="drivingschool/drivingschool_server.lua" type="server"/>
 	<script src="drivingschool/drivingschool_speedwatch_client.lua" type="client"/>
@@ -96,14 +114,6 @@
 	<!-- VEHICLESYS -->
 	<script src="vehiclesys/vehiclesys_server.lua" type="server"/>
 	<script src="vehiclesys/vehiclesys_client.lua" type="client"/>
-	
-	
-	<!-- ITEMSYS -->
-	<script src="itemsys/items_shared.lua" type="shared"/>
-	<script src="itemsys/items_client.lua" type="client"/>
-	
-	<script src="itemsys/inventory_server.lua" type="server"/>
-	<script src="itemsys/inventory_client.lua" type="client"/>
 	
 	
 	
@@ -263,4 +273,5 @@
 	<file src="images/items/card_plane.png"/>
 	<file src="images/items/card_gunA.png"/>
 	<file src="images/items/card_gunB.png"/>
+	<file src="images/items/stone.png"/>
 </meta>

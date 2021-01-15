@@ -188,6 +188,22 @@ local function getStringRow(str, row)
 end
 
 
+local function isPedLookingAt(ped, eleX, eleY, eleZ)
+	local x, y, z = getElementPosition(ped)
+	
+	local dx, dy, dz = eleX - x, eleY - y, eleZ - z
+	
+	local pedForward = Matrix(Vector3(getElementPosition(ped)), Vector3(getElementRotation(ped))):getForward()
+	
+	local angle = getAngle3D(pedForward.x, pedForward.y, pedForward.z, dx, dy, dz)
+	
+	if angle < (math.pi / 3) then
+		return true
+	end
+	return false
+end
+
+
 cmath = {
 	round = round,
 	move_towards = move_towards,
@@ -207,4 +223,5 @@ cmath = {
 	getStringMaxRows = getStringMaxRows,
 	getStringRowStartAndEnd = getStringRowStartAndEnd,
 	getStringRow = getStringRow,
+	isPedLookingAt = isPedLookingAt,
 }

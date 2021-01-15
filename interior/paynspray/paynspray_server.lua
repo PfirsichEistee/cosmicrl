@@ -1,17 +1,17 @@
 
--- ID, [2]x1, y1, z1, [5]rx1, ry1, rz1, [8]x2, y2, z2, [11]rx2, ry2, rz2, [14]colshape, [15]gate
+-- ID, [2]x1, y1, z1, [5]rx1, ry1, rz1, [8]x2, y2, z2, [11]rx2, ry2, rz2, [14]colshape, [15]gate, [16] depth
 
 local paynspray = {
-	[1] = cmath.List(5043, 1843.3000, -1856.3000, 13.9000, 0, 0, 0, 1844.45, -1856.3, 15.2, 0, 90, 0, nil, nil),
-	[2] = cmath.List(5856, 1025, -1029.4, 33.1, 0, 0, 90, 1025, -1027.75, 34.8, 0, 90, 90, nil, nil),
-	[3] = cmath.List(11319, -1904.6, 277.6, 43, 0, 0, 90, -1904.6, 280.5, 45.7, 0, 90, 90, nil, nil),
-	[4] = cmath.List(9625, -2425.6, 1028.1, 52.3, 0, 0, 90, -2425.6, 1025.6, 55, 0, -90, 90, nil, nil),
+	[1] = cmath.List(5043, 1843.3000, -1856.3000, 13.9000, 0, 0, 0, 1844.45, -1856.3, 15.2, 0, 90, 0, nil, nil, 5),
+	[2] = cmath.List(5856, 1025, -1029.4, 33.1, 0, 0, 90, 1025, -1027.75, 34.8, 0, 90, 90, nil, nil, 5),
+	[3] = cmath.List(11319, -1904.6, 277.6, 43, 0, 0, 90, -1904.6, 280.5, 45.7, 0, 90, 90, nil, nil, 4),
+	[4] = cmath.List(9625, -2425.6, 1028.1, 52.3, 0, 0, 90, -2425.6, 1025.6, 55, 0, -90, 90, nil, nil, 4),
 }
 
 
 for a, b in ipairs(paynspray) do
 	local dx, dy = b[8] - b[2], b[9] - b[3]
-	local col = createColSphere(b[2] + dx * 4, b[3] + dy * 4, b[4] - 0.5, 1)
+	local col = createColSphere(b[2] + dx * b[16], b[3] + dy * b[16], b[4] - 0.5, 3)
 	cosmicSetElementData(col, "paynspray", true)
 	cosmicSetElementData(col, "busy", false)
 	

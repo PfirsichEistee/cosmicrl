@@ -94,11 +94,3 @@ local function townhallBuy(license)
 	end
 end
 addEventHandler("townhallBuy", getRootElement(), townhallBuy)
-
-
-
-
-local function cmd(player)
-	setElementPosition(player, -2763.01171875, 371.04675292969, 5.8670043945313)
-end
-addCommandHandler("ok", cmd)
