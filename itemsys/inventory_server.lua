@@ -105,7 +105,7 @@ end
 
 function cosmicLoadPlayerInventory(userID)
 	if not inv[userID] then
-		local result = dbPoll(dbQuery(dbHandler, "SELECT Items FROM inventory WHERE ID=?", userID), -1)
+		local result = dbPoll(dbQuery(dbHandler, "SELECT Items, Weapons FROM inventory WHERE ID=?", userID), -1)
 		
 		if result and result[1] then
 			-- example: 1-5|4-2|.....
@@ -132,6 +132,21 @@ function cosmicLoadPlayerInventory(userID)
 			
 			local player = getPlayerFromName(IDToName(userID))
 			triggerClientEvent(player, "clientSyncInventory", player, new, true)
+			
+			
+			-- load weapons
+			for i = 1, 999, 1 do
+				local ph = gettok(result[1]["Weapons"], i, "|")
+				
+				if ph then
+					local id = tonumber(gettok(ph, 1, "-"))
+					local amount = tonumber(gettok(ph, 2, "-"))
+					
+					local idk = giveWeapon(player, id, amount)
+				else
+					break
+				end
+			end
 		end
 	else
 		local player = getPlayerFromName(IDToName(userID))
@@ -145,7 +160,6 @@ function cosmicUnloadAndSavePlayerInventory(player)
 	
 	if inv[id] then
 		local str = ""
-		
 		for i = 1, #inv[id], 1 do
 			str = str .. inv[id][i].id .. "-" .. inv[id][i].amount
 			
@@ -154,7 +168,23 @@ function cosmicUnloadAndSavePlayerInventory(player)
 			end
 		end
 		
-		dbExec(dbHandler, "UPDATE inventory SET Items=? WHERE ID=?", str, id)
+		
+		local gunStr = ""
+		for i = 0, 12, 1 do
+			local id = getPedWeapon(player, i)
+			local amount = getPedTotalAmmo(player, i)
+			
+			if id ~= 0 and amount > 0 then
+				if string.len(gunStr) > 0 then
+					gunStr = gunStr .. "|"
+				end
+				
+				gunStr = gunStr .. id .. "-" .. amount
+			end
+		end
+		
+		
+		dbExec(dbHandler, "UPDATE inventory SET Items=?, Weapons=? WHERE ID=?", str, gunStr, id)
 		
 		
 		inv[id] = nil

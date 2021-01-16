@@ -102,6 +102,23 @@ local function lerp3D(x1, y1, z1, x2, y2, z2, mult)
 end
 
 
+local function smooth(from, to, mult, minSpeed)
+	-- basically lerp but with minimum speed
+	mult = clamp(mult, 0, 1)
+	if math.abs(to - from) > 0 then
+		local delta = (to - from) * mult
+		
+		if math.abs(delta) < minSpeed then
+			return move_towards(from, to, delta)
+		else
+			return from + delta
+		end
+	end
+	
+	return to
+end
+
+
 local function dirToAngle(x, y)
 	local rtd = (180 / math.pi)
 	
@@ -216,6 +233,7 @@ cmath = {
 	lerp = lerp,
 	lerp2D = lerp2D,
 	lerp3D = lerp3D,
+	smooth = smooth,
 	List = List,
 	dirToAngle = dirToAngle,
 	getElementSpeed = getElementSpeed,

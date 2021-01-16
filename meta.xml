@@ -38,6 +38,7 @@
 	<script src="UI/hud_client.lua" type="client"/>
 	<script src="UI/minimap_client.lua" type="client"/>
 	<script src="UI/gauge_client.lua" type="client"/>
+	<script src="UI/tablist_client.lua" type="client"/>
 	
 	<script src="UI/infobox_client.lua" type="client"/>
 	

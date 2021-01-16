@@ -40,15 +40,35 @@ local function playerStartJob(jobID, extra)
 		return
 	end
 	
-	
-	setElementData(client, "job", jobID)
-	outputChatBox("yeah lets go " .. jobID .. "; " .. extra)
-	
 	if jobID == 1 then
 		startJobConstructionWorker(client, extra)
 	end
 end
 addEventHandler("playerStartJob", getRootElement(), playerStartJob)
+
+
+local function playerQuitJob(player)
+	if not isElement(player) then -- onPlayerQuit or onPlayerWasted event
+		player = source
+	end
+	
+	
+	if getElementData(player, "job") then
+		local jobID = getElementData(player, "job")
+		
+		if jobID == 1 then
+			quitJobConstructionWorker(player)
+		end
+		
+		
+		outputChatBox("Du hast die Arbeit beendet. Dein Lohn wird dir am Zahltag ausgezahlt.", player, 255, 175, 0)
+		
+		removeElementData(player, "job")
+	end
+end
+addCommandHandler("quitjob", playerQuitJob)
+addEventHandler("onPlayerQuit", getRootElement(), playerQuitJob)
+addEventHandler("onPlayerWasted", getRootElement(), playerQuitJob)
 
 
 

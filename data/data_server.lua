@@ -38,15 +38,26 @@ addEventHandler("onResourceStart", resourceRoot, dataResourceStart)
 
 
 local function dataPlayerLeave()
-	outputDebugString("Player '" .. getPlayerName(source) .. "' left. Saving data...", 4, 255, 0, 0)
-	cosmicUnloadAndSavePlayerInventory(source)
-	
-	dbExec(dbHandler, "UPDATE playerdata SET Adminlevel=?, Spawn=?, Money=?, Bankmoney=?, Skin=?, Playtime=? WHERE id=" .. NameToID(getPlayerName(source)),
-		cosmicGetElementData(source, "Adminlevel"), cosmicGetElementData(source, "Spawn"), cosmicGetElementData(source, "Money"), cosmicGetElementData(source, "Bankmoney"), cosmicGetElementData(source, "Skin"), cosmicGetElementData(source, "Playtime"))
-	
-	cosmicClearElementData(source)
+	if cosmicGetElementData(source, "Online") then
+		outputDebugString("Player '" .. getPlayerName(source) .. "' left. Saving data...", 4, 0, 255, 0)
+		cosmicUnloadAndSavePlayerInventory(source)
+		
+		dbExec(dbHandler, "UPDATE playerdata SET Adminlevel=?, Spawn=?, Money=?, Bankmoney=?, Skin=?, Playtime=? WHERE id=" .. NameToID(getPlayerName(source)),
+			cosmicGetElementData(source, "Adminlevel"), cosmicGetElementData(source, "Spawn"), cosmicGetElementData(source, "Money"), cosmicGetElementData(source, "Bankmoney"), cosmicGetElementData(source, "Skin"), cosmicGetElementData(source, "Playtime"))
+		
+		cosmicClearElementData(source)
+	end
 end
 addEventHandler("onPlayerQuit", getRootElement(), dataPlayerLeave)
+
+
+local function dataResourceStop()
+	for a, b in ipairs(getElementsByType("player")) do
+		source = b
+		dataPlayerLeave()
+	end
+end
+addEventHandler("onResourceStop", resourceRoot, dataResourceStop)
 
 
 

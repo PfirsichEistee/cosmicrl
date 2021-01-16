@@ -59,8 +59,6 @@ local function loginPlayer(password)
 					cosmicSetElementData(client, "Online", true)
 					--cosmicSetElementData(client, "Onlinetime", getTimestamp(0))
 					
-					cosmicLoadPlayerInventory(id)
-					
 					
 					triggerClientEvent(client, "infobox", client, "Willkommen zurueck!", 3, 75, 255, 75)
 					triggerClientEvent(client, "infomsg", client, "Druecke 'F1', um das Hilfemenue zu oeffnen. Unser Forum findest du unter\n" .. _forum .. ". Viel spass!", 75, 255, 75)
@@ -69,6 +67,8 @@ local function loginPlayer(password)
 					
 					
 					cosmicSpawnPlayer(client)
+					
+					cosmicLoadPlayerInventory(id)
 				else
 					kickPlayer(client, "Unbekannter Fehler")
 				end

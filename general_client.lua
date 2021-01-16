@@ -77,3 +77,74 @@ local function disableGhostMode(key, pressed)
 	end
 end
 addEventHandler("onClientKey", root, disableGhostMode)
+
+
+
+-- Object movement
+function moveObjectOnTrail(element, t, ...) -- (element, timeInSeconds, Vector3 point1, Vector3 point2, Vector3 point...)
+	local points = {...}
+	
+	local x, y, z = getElementPosition(element)
+	local totalDist = cmath.dist3D(x, y, z, points[1].x, points[1].y, points[1].z)
+	
+	if #points > 1 then
+		for i = #points, 2, -1 do
+			totalDist = totalDist + cmath.dist3D(points[i - 1].x, points[i - 1].y, points[i - 1].z, points[i].x, points[i].y, points[i].z)
+		end
+	end
+	
+	
+	local timePerUnit = t / totalDist
+	
+	
+	local movement = {
+		element = element,
+		points = points,
+		timePerUnit = timePerUnit,
+	}
+	
+	
+	local phTime = cmath.dist3D(x, y, z, points[1].x, points[1].y, points[1].z) * timePerUnit
+	moveObject(element, phTime * 1000, points[1].x, points[1].y, points[1].z)
+	
+	
+	if #points > 1 then
+		for i = 1, #points - 1, 1 do
+			-- object IS at point i and at time phTime
+			setTimer(function(element, x, y, z, tx, ty, tz, tpu)
+				setElementPosition(element, x, y, z)
+				
+				local phTime = cmath.dist3D(x, y, z, tx, ty, tz) * tpu
+				
+				moveObject(element, phTime * 1000, tx, ty, tz)
+			end, phTime * 1000, 1, element, points[i].x, points[i].y, points[i].z, points[i + 1].x, points[i + 1].y, points[i + 1].z, timePerUnit)
+			--[[setTimer(function(m, i)
+				setElementPosition(m.element, m.points[i].x, m.points[i].y, m.points[i].z)
+				
+				local phTime = cmath.dist3D(m.points[i].x, m.points[i].y, m.points[i].z,
+					m.points[i + 1].x, m.points[i + 1].y, m.points[i + 1].z) * m.timePerUnit
+				
+				moveObject(m.element, phTime * 1000, m.points[i + 1].x, m.points[i + 1].y, m.points[i + 1].z)
+				
+				outputChatBox("New point! " .. i)
+			end, phTime * 1000, 1, movement, i)]]
+			
+			
+			phTime = phTime + cmath.dist3D(points[i].x, points[i].y, points[i].z, points[i + 1].x, points[i + 1].y, points[i + 1].z) * timePerUnit
+		end
+	end
+	
+	
+	--[[if #points > 1 then
+		setTimer(function(m)
+			setElementPosition(m.element, m.points[m.current].x, m.points[m.current].y, m.points[m.current].z)
+			
+			local phTime = cmath.dist3D(m.points[m.current].x, m.points[m.current].y, m.points[m.current].z,
+				m.points[m.current + 1].x, m.points[m.current + 1].y, m.points[m.current + 1].z) * m.timePerUnit
+			
+			moveObject(m.element, phTime * 1000, m.points[m.current + 1].x, m.points[m.current + 1].y, m.points[m.current + 1].z)
+			
+			m.current = m.current + 1
+		end, phTime * 1000, #points - 1, movement)
+	end]]
+end

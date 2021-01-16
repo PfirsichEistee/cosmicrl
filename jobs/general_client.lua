@@ -1,4 +1,5 @@
 addEvent("openJobWindow", true)
+addEvent("onClientJobStart", true)
 
 
 local function openJobWindow(id)

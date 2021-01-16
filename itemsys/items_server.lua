@@ -18,6 +18,8 @@ local function enterItemPickup(player)
 		
 		if success then
 			destroyElement(source)
+			
+			playSoundFrontEnd(player, 0)
 		end
 	end
 end

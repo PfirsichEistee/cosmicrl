@@ -35,6 +35,13 @@ end
 
 function startJobConstructionWorker(player, extra)
 	if extra == 1 then -- Erz-Gewinnung
+		if getPedWeapon(player, 1) ~= 6 then
+			triggerClientEvent(player, "infomsg", player, "Du benoetigst eine Schaufel.\nDu findest sie in allen 24/7 Shops.", 255, 100, 100)
+			return
+		end
+		
+		triggerClientEvent(player, "onClientJobStart", player, 1, extra)
+		
 		for a, b in ipairs(filterMachine) do
 			setElementVisibleTo(b, player, true)
 			setElementVisibleTo(getAttachedElements(b)[1], player, true)
@@ -42,11 +49,18 @@ function startJobConstructionWorker(player, extra)
 	else -- Transport
 		
 	end
+	
+	
+	setElementData(player, "job", 1)
+	outputChatBox("Du hast mit der Arbeit begonnen. Tippe /quitjob um sie zu beenden.", player, 255, 255, 0)
 end
 
 
 function quitJobConstructionWorker(player, disconnected)
-	
+	for a, b in ipairs(filterMachine) do
+		setElementVisibleTo(b, player, false)
+		setElementVisibleTo(getAttachedElements(b)[1], player, false)
+	end
 end
 
 
@@ -63,13 +77,10 @@ local function playerHitRock()
 					setElementPosition(b, x, y, z + (1 - (getElementHealth(b) / 1000)) * -0.25)
 					
 					if math.random() > 0.5 then
-						local amount = 1
+						local amount = math.ceil(math.random() * 3)
 						
 						if math.random() > 0.8 then
-							amount = amount + 1
-							if math.random() > 0.8 then
-								amount = amount + math.ceil(math.random() * 20)
-							end
+							amount = amount + math.ceil(math.random() * 6)
 						end
 						
 						local r = math.pi * 2 * math.random()
@@ -112,25 +123,23 @@ addEventHandler("playerHitRock", getRootElement(), playerHitRock)
 
 local function playerDropRock(itemID)
 	if itemID == 16 and getElementData(client, "job") == getJobIdFromName("Bauarbeiter") then
-		if cosmicGetPlayerItem(client, 16) < 5 then
-			triggerClientEvent(client, "infomsg", client, "Du brauchst mindestens 5 Steine", 255, 100, 100)
-			return
-		end
-		
-		local strA, strB = getPedAnimation(client)
-		
-		if strA then -- animation is running
+		if cosmicGetElementData(client, "BlockStoneUsage") or getPedOccupiedVehicle(client) then
 			return
 		end
 		
 		for a, b in ipairs(filterMachine) do
 			if cmath.distElements(client, b) < 4 then
-				outputChatBox("WIP ANIMATIONS")
+				if cosmicGetPlayerItem(client, 16) < 5 then
+					triggerClientEvent(client, "infomsg", client, "Du brauchst mindestens 5 Steine", 255, 100, 100)
+					return
+				end
+				
+				triggerClientEvent(client, "cwCreateRockAnim", client, a)
 				
 				cosmicSetPlayerItem(client, 16, cosmicGetPlayerItem(client, 16) - 5)
 				local earnings = 0
 				for i = 1, 5, 1 do
-					earnings = earnings + 6 + math.floor(16 * math.random())
+					earnings = earnings + math.ceil(6 * math.random())
 				end
 				
 				cosmicSetElementData(client, "Money", cosmicGetElementData(client, "Money") + earnings)
@@ -139,7 +148,12 @@ local function playerDropRock(itemID)
 				triggerClientEvent(client, "infomsg", client, "+ $" .. earnings, 100, 255, 100)
 				
 				
-				setPedAnimation(client, "grenade", "weapon_throw", -1, false, true, true, false, 250, true)
+				setPedAnimation(client, "grenade", "weapon_throw", -1, false, false, true, false, 250, true)
+				cosmicSetElementData(client, "BlockStoneUsage", true)
+				
+				setTimer(function(player)
+					cosmicSetElementData(player, "BlockStoneUsage", nil)
+				end, 1000, 1, client)
 				
 				return
 			end

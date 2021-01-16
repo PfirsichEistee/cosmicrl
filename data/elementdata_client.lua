@@ -8,8 +8,12 @@ local edata = {}
 
 function cosmicClientGetElementData(element, name)
 	if edata[element] then
-		return edata[element][name]
+		if edata[element][name] ~= nil then
+			return edata[element][name]
+		end
 	end
+	
+	return getElementData(element, name)
 end
 
 
