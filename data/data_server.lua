@@ -11,9 +11,9 @@ local function mysql_connect()
 	dbHandler = dbConnect("mysql", "dbname=cosmicdb;host=127.0.0.1;port=3306", MYSQLUSER, MYSQLPASSWORD)
 	
 	if dbHandler then
-		outputDebugString("[MYSQL] Successfully connected to database!", 4, 0, 255, 0)
+		outputDebugString("\n[MYSQL] Successfully connected to database!", 4, 0, 255, 0)
 	else
-		outputDebugString("[MYSQL] Couldn't connect to database!", 4, 255, 0, 0)
+		outputDebugString("\n[MYSQL] Couldn't connect to database!", 4, 255, 0, 0)
 	end
 	
 	
@@ -42,8 +42,8 @@ local function dataPlayerLeave()
 		outputDebugString("Player '" .. getPlayerName(source) .. "' left. Saving data...", 4, 0, 255, 0)
 		cosmicUnloadAndSavePlayerInventory(source)
 		
-		dbExec(dbHandler, "UPDATE playerdata SET Adminlevel=?, Spawn=?, Money=?, Bankmoney=?, Skin=?, Playtime=? WHERE id=" .. NameToID(getPlayerName(source)),
-			cosmicGetElementData(source, "Adminlevel"), cosmicGetElementData(source, "Spawn"), cosmicGetElementData(source, "Money"), cosmicGetElementData(source, "Bankmoney"), cosmicGetElementData(source, "Skin"), cosmicGetElementData(source, "Playtime"))
+		dbExec(dbHandler, "UPDATE playerdata SET Adminlevel=?, Spawn=?, Money=?, Bankmoney=?, Skin=?, Playtime=?, Payday=?, FactionID=?, FactionRank=?, GroupID=?, GroupRank=? WHERE id=" .. NameToID(getPlayerName(source)),
+			cosmicGetElementData(source, "Adminlevel"), cosmicGetElementData(source, "Spawn"), cosmicGetElementData(source, "Money"), cosmicGetElementData(source, "Bankmoney"), cosmicGetElementData(source, "Skin"), cosmicGetElementData(source, "Playtime"), cosmicGetElementData(source, "Payday"), cosmicGetElementData(source, "FactionID"), cosmicGetElementData(source, "FactionRank"), cosmicGetElementData(source, "GroupID"), cosmicGetElementData(source, "GroupRank"))
 		
 		cosmicClearElementData(source)
 	end

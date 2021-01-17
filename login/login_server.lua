@@ -55,6 +55,11 @@ local function loginPlayer(password)
 					cosmicSetElementData(client, "Bankmoney", dataResult[1]["Bankmoney"])
 					cosmicSetElementData(client, "Skin", dataResult[1]["Skin"])
 					cosmicSetElementData(client, "Playtime", dataResult[1]["Playtime"])
+					cosmicSetElementData(client, "Payday", dataResult[1]["Payday"])
+					cosmicSetElementData(client, "FactionID", dataResult[1]["FactionID"])
+					cosmicSetElementData(client, "FactionRank", dataResult[1]["FactionRank"])
+					cosmicSetElementData(client, "GroupID", dataResult[1]["GroupID"])
+					cosmicSetElementData(client, "GroupRank", dataResult[1]["GroupRank"])
 					
 					cosmicSetElementData(client, "Online", true)
 					--cosmicSetElementData(client, "Onlinetime", getTimestamp(0))
@@ -119,7 +124,7 @@ local function registerPlayer(password, day, month, year, gender)
 			playtime = 0,
 		}
 		
-		dbExec(dbHandler, "INSERT INTO playerdata (ID, Adminlevel, Spawn, Money, Bankmoney, Skin, Playtime) VALUES (?, ?, ?, ?, ?, ?, ?)", newID, start.admin, start.spawn, start.money, start.bankmoney, start.skin, start.playtime)
+		dbExec(dbHandler, "INSERT INTO playerdata (ID, Adminlevel, Spawn, Money, Bankmoney, Skin, Playtime, FactionID, FactionRank, GroupID, GroupRank) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newID, start.admin, start.spawn, start.money, start.bankmoney, start.skin, start.playtime, 0, 0, 0, 0)
 		
 		dbExec(dbHandler, "INSERT INTO inventory (ID, Items) VALUES (?, ?)", newID, "")
 		cosmicLoadPlayerInventory(newID)
@@ -131,6 +136,11 @@ local function registerPlayer(password, day, month, year, gender)
 		cosmicSetElementData(client, "Bankmoney", start.bankmoney)
 		cosmicSetElementData(client, "Skin", start.skin)
 		cosmicSetElementData(client, "Playtime", start.playtime)
+		cosmicSetElementData(client, "Payday", 0)
+		cosmicSetElementData(client, "FactionID", 0)
+		cosmicSetElementData(client, "FactionRank", 0)
+		cosmicSetElementData(client, "GroupID", 0)
+		cosmicSetElementData(client, "GroupRank", 0)
 		
 		cosmicSetElementData(client, "Online", true)
 		--cosmicSetElementData(client, "Onlinetime", getTimestamp(0))

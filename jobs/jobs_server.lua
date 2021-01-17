@@ -18,7 +18,7 @@ end
 local function playerEnterJobPickup(player)
 	for a, b in pairs(jobPickup) do
 		if b == source then
-			if getElementData(player, "job") then
+			if getElementData(player, "Job") then
 				triggerClientEvent(player, "infomsg", player, "Du bist bereits bei der Arbeit!", 255, 100, 100)
 				return
 			end
@@ -47,23 +47,25 @@ end
 addEventHandler("playerStartJob", getRootElement(), playerStartJob)
 
 
-local function playerQuitJob(player)
+function playerQuitJob(player, silent)
 	if not isElement(player) then -- onPlayerQuit or onPlayerWasted event
 		player = source
 	end
 	
 	
-	if getElementData(player, "job") then
-		local jobID = getElementData(player, "job")
+	if getElementData(player, "Job") then
+		local jobID = getElementData(player, "Job")
 		
 		if jobID == 1 then
 			quitJobConstructionWorker(player)
 		end
 		
 		
-		outputChatBox("Du hast die Arbeit beendet. Dein Lohn wird dir am Zahltag ausgezahlt.", player, 255, 175, 0)
+		if silent ~= true then
+			outputChatBox("Du hast die Arbeit beendet. Dein Lohn wird dir am Zahltag ausgezahlt.", player, 255, 175, 0)
+		end
 		
-		removeElementData(player, "job")
+		removeElementData(player, "Job")
 	end
 end
 addCommandHandler("quitjob", playerQuitJob)

@@ -113,8 +113,7 @@ function drawMinimap()
 		local bx, by, bz = getElementPosition(b)
 		bx, by = worldToMinimap(bx, by)
 		
-		
-		if bx > secX and bx < (secX + secW) and by > secY and by < (secY + secH) or cmath.dist2D(x * 6000, y * 6000, bx * 6000, by * 6000) <= getBlipVisibleDistance(b) then
+		if bx > secX and bx < (secX + secW) and by > secY and by < (secY + secH) or cmath.dist2D(x * 6000, y * 6000, bx, by) <= getBlipVisibleDistance(b) then
 			local icon = getBlipIcon(b)
 			bx = (cmath.clamp(bx, secX, secX + secW) - secX) / secW
 			by = (cmath.clamp(by, secY, secY + secH) - secY) / secH
@@ -144,7 +143,7 @@ function drawMinimap()
 	-- Draw player arrow
 	local rx, ry, rz = getElementRotation(e)
 	
-	if secX > 0 and secX < (imgW - secW) then
+	if secX > 0 and secX < (imgW - secW) and secY > 0 and secY < (imgH - secH) then
 		dxDrawImage(mapX + mapW / 2 - s / 2, mapY + mapH / 2 - s / 2, s, s, "images/map/2.png", -rz)
 	else
 		x = (cmath.clamp(x * imgW, secX, secX + secW) - secX) / secW

@@ -62,7 +62,7 @@ end
 
 
 local function playerHitRock(loss, attacker)
-	if getElementData(getLocalPlayer(), "job") == getJobIdFromName("Bauarbeiter") and getElementModel(source) == 906 and getPedWeapon(getLocalPlayer()) == 6 and not getPedOccupiedVehicle(getLocalPlayer()) then
+	if getElementData(getLocalPlayer(), "Job") == getJobIdFromName("Bauarbeiter") and getElementModel(source) == 906 and getPedWeapon(getLocalPlayer()) == 6 and not getPedOccupiedVehicle(getLocalPlayer()) then
 		cwJiggleRock(source)
 		triggerServerEvent("playerHitRock", source)
 	end
@@ -113,7 +113,10 @@ function openWindowConstructionWorker()
 	gui["job1"] = dxgui_CreateButton(x, y, w, h, "Erz-Gewinnung", false, gui["window"])
 	
 	x, y, w, h = dxgui_prep_getValues(prep, 2, 1, 1, 1)
-	gui["job2"] = dxgui_CreateButton(x, y, w, h, "Transport von\nRohstoffen", false, gui["window"])
+	gui["job2"] = dxgui_CreateButton(x, y, w, h, "Transport von\nZement", false, gui["window"])
+	
+	x, y, w, h = dxgui_prep_getValues(prep, 3, 1, 1, 1)
+	gui["job3"] = dxgui_CreateButton(x, y, w, h, "Transport von\nRohstoffen", false, gui["window"])
 	
 	
 	addEventHandler("onDXGUIClicked", gui["job1"], function()
@@ -122,6 +125,13 @@ function openWindowConstructionWorker()
 		showCursor(false)
 		
 		triggerServerEvent("playerStartJob", getLocalPlayer(), 1, 1)
+	end)
+	addEventHandler("onDXGUIClicked", gui["job2"], function()
+		dxgui_ClearKill(gui["window"])
+		gui = {}
+		showCursor(false)
+		
+		triggerServerEvent("playerStartJob", getLocalPlayer(), 1, 2)
 	end)
 	
 	addEventHandler("onDXGUIClicked", gui["close"], function()
@@ -137,8 +147,6 @@ local function jobStartInfo(jobID, extra)
 		if extra == 1 then
 			toggleAllControls(false)
 			openInfoErzGewinnung()
-		else
-			
 		end
 	end
 end

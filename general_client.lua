@@ -1,6 +1,7 @@
 
 addEvent("clearChat", true)
 addEvent("ghostMode", true)
+addEvent("playClientSound", true)
 
 setDevelopmentMode(true)
 screenX, screenY = guiGetScreenSize()
@@ -77,6 +78,18 @@ local function disableGhostMode(key, pressed)
 	end
 end
 addEventHandler("onClientKey", root, disableGhostMode)
+
+
+local function playClientSound(id_or_path)
+	if tonumber(id_or_path) then
+		if id_or_path == 1 then
+			playSound("sounds/reached.mp3")
+		end
+	else
+		playSound(id_or_path)
+	end
+end
+addEventHandler("playClientSound", getRootElement(), playClientSound)
 
 
 

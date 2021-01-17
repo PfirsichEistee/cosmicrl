@@ -83,10 +83,14 @@
 	<script src="itemsys/inventory_client.lua" type="client"/>
 	
 	
+	<!-- FACTIONS -->
+	<script src="factions/factions_shared.lua" type="shared"/>
+	
+	
 	<!-- JOBS -->
-	<script src="jobs/general_shared.lua" type="shared"/>
-	<script src="jobs/general_server.lua" type="server"/>
-	<script src="jobs/general_client.lua" type="client"/>
+	<script src="jobs/jobs_shared.lua" type="shared"/>
+	<script src="jobs/jobs_server.lua" type="server"/>
+	<script src="jobs/jobs_client.lua" type="client"/>
 	
 	<script src="jobs/constructionworker/constructionworker_server.lua" type="server"/>
 	<script src="jobs/constructionworker/constructionworker_client.lua" type="client"/>
@@ -120,6 +124,8 @@
 	
 	<!-- FILES -->
 	<file src="fonts/Monstercat.ttf"/>
+	
+	<file src="sounds/reached.mp3"/>
 	
 	<file src="images/DXGUI/InventorySelection.png"/>
 	<file src="images/DXGUI/dropdown.png"/>

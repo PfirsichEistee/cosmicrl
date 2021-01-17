@@ -138,7 +138,9 @@ local function render()
 	money = "$" .. money
 	local py = phY + imgSize + space * 3 + rowH * 2 - mfh * 0.2
 	for i = 0, 8, 1 do
-		hudText(string.sub(money, i + 1, i + 1), phX + ((phW / 9) * i), py, phX + ((phW / 9) * i) + 1, py + 1, tocolor(0, 200, 0, 255), mfs, "pricedown", "left", "top")
+		--hudText(string.sub(money, i + 1, i + 1), phX + ((phW / 9) * i), py, phX + ((phW / 9) * i) + 1, py + 1, tocolor(0, 200, 0, 255), mfs, "pricedown", "left", "top")
+		--hudText(string.sub(money, i + 1, i + 1), phX + ((phW / 9) * i) + ((phW / 9) / 2), py, phX + ((phW / 9) * i) + 1 + ((phW / 9) / 2), py + 1, tocolor(0, 200, 0, 255), mfs, "pricedown", "center", "top")
+		hudText(string.sub(money, i + 1, i + 1), phX + ((phW / 9) * i), py, phX + ((phW / 9) * (i + 1)), py + 1, tocolor(0, 200, 0, 255), mfs, "pricedown", "center", "top")
 	end
 	
 	

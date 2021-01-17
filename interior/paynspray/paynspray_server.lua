@@ -62,6 +62,7 @@ local function enterPaynSpray(veh, matchDimension)
 				
 				setTimer(function()
 					fixVehicle(veh)
+					playSoundFrontEnd(player, 46)
 					
 					setElementFrozen(veh, false)
 					toggleAllControls(player, true)

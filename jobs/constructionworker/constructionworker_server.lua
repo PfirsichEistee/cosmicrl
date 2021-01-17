@@ -32,6 +32,73 @@ end
 
 
 
+local transportMarker = {
+	createMarker(824.72985839844, 849.71026611328, 10.613054084778, "cylinder", 4, 255, 0, 0, 255, nil),
+	createMarker(-2101.65625, 204.23728942871, 34.387924957275, "cylinder", 4, 255, 0, 0, 255, nil),
+	createMarker(2706.3820800781, 882.15246582031, 8.956210899353, "cylinder", 4, 255, 0, 0, 255, nil),
+	createMarker(326.072265625, 2560.3327636719, 15.463005828857, "cylinder", 4, 255, 0, 0, 255, nil),
+}
+for a, b in ipairs(transportMarker) do
+	setElementVisibleTo(b, getRootElement(), false)
+	
+	local ph = createBlipAttachedTo(b, 0, 2, 255, 0, 0, 255, 0, 999999, nil)
+	setElementVisibleTo(ph, getRootElement(), false)
+end
+
+
+
+
+local function hitTransportMarker(player, matching)
+	if isElement(player) and getElementType(player) == "player" and matching and isElementVisibleTo(source, player) then
+		for a, b in ipairs(transportMarker) do
+			if b == source then
+				if cosmicGetElementData(player, "JobType") == 2 then -- Zement
+					local veh = getPedOccupiedVehicle(player)
+					if not veh or cosmicGetElementData(veh, "Jobber") ~= player then
+						return
+					end
+					if cmath.getElementSpeed(veh) > ((40000 / 60) / 60) then -- > 40kmh
+						triggerClientEvent(player, "infomsg", player, "Du bist zu schnell!", 255, 100, 100)
+						return
+					end
+					
+					setElementVisibleTo(source, player, false)
+					setElementVisibleTo(getAttachedElements(source)[1], player, false)
+					
+					if a == 1 then -- its the return point
+						outputChatBox("#FFFFFFChef#FFFFDD: Gute Arbeit! Deinen Lohn erhaelst du beim naechsten Zahltag!", player, 255, 255, 255, true)
+						
+						destroyElement(veh)
+						
+						cosmicSetElementData(player, "Payday", cosmicGetElementData(player, "Payday") + 200 + math.floor(100 * math.random()))
+						
+						playerQuitJob(player, true)
+					else
+						setElementVisibleTo(transportMarker[1], player, true)
+						setElementVisibleTo(getAttachedElements(transportMarker[1])[1], player, true)
+						
+						setElementFrozen(veh, true)
+						setElementFrozen(player, true)
+						
+						setTimer(function()
+							setElementFrozen(veh, false)
+							setElementFrozen(player, false)
+							
+							outputChatBox("#FFFFFFArbeiter#FFFFDD: Danke. Jetzt musst du nur noch den Wagen zurueckfahren, dann ist Feierabend.", player, 255, 255, 255, true)
+						end, 5000, 1)
+					end
+				else -- Rohstoffe
+					
+				end
+				
+				
+				break
+			end
+		end
+	end
+end
+addEventHandler("onMarkerHit", getRootElement(), hitTransportMarker)
+
 
 function startJobConstructionWorker(player, extra)
 	if extra == 1 then -- Erz-Gewinnung
@@ -40,18 +107,35 @@ function startJobConstructionWorker(player, extra)
 			return
 		end
 		
-		triggerClientEvent(player, "onClientJobStart", player, 1, extra)
-		
 		for a, b in ipairs(filterMachine) do
 			setElementVisibleTo(b, player, true)
 			setElementVisibleTo(getAttachedElements(b)[1], player, true)
 		end
-	else -- Transport
+	elseif extra == 2 then -- Transport (Zement)
+		if cosmicGetPlayerItem(player, 10) == 0 then -- LKW Schein
+			triggerClientEvent(player, "infomsg", player, "Du benoetigst einen LKW-Schein", 255, 100, 100)
+			return
+		end
 		
+		cosmicSetElementData(player, "JobType", 2)
+		
+		local id = math.ceil(math.random() * (#transportMarker - 1)) + 1
+		setElementVisibleTo(transportMarker[id], player, true)
+		setElementVisibleTo(getAttachedElements(transportMarker[id])[1], player, true)
+		
+		local veh = createVehicle(524, 812.14495849609, 824.41497802734, 11.058280944824, -3.6203887462616, 6.7851667404175, 307.78686523438, "COSMIC")
+		cosmicSetElementData(veh, "Job", 1)
+		cosmicSetElementData(veh, "Jobber", player)
+		
+		warpPedIntoVehicle(player, veh)
+		
+		triggerClientEvent(player, "ghostMode", player, 4000, true)
 	end
 	
 	
-	setElementData(player, "job", 1)
+	triggerClientEvent(player, "onClientJobStart", player, 1, extra)
+	
+	setElementData(player, "Job", 1)
 	outputChatBox("Du hast mit der Arbeit begonnen. Tippe /quitjob um sie zu beenden.", player, 255, 255, 0)
 end
 
@@ -61,6 +145,18 @@ function quitJobConstructionWorker(player, disconnected)
 		setElementVisibleTo(b, player, false)
 		setElementVisibleTo(getAttachedElements(b)[1], player, false)
 	end
+	for a, b in ipairs(transportMarker) do
+		setElementVisibleTo(b, player, false)
+		setElementVisibleTo(getAttachedElements(b)[1], player, false)
+	end
+	
+	for a, b in ipairs(getElementsByType("vehicle")) do
+		if cosmicGetElementData(b, "Jobber") == player then
+			destroyElement(b)
+		end
+	end
+	
+	cosmicSetElementData(player, "JobType", nil)
 end
 
 
@@ -122,7 +218,7 @@ addEventHandler("playerHitRock", getRootElement(), playerHitRock)
 
 
 local function playerDropRock(itemID)
-	if itemID == 16 and getElementData(client, "job") == getJobIdFromName("Bauarbeiter") then
+	if itemID == 16 and getElementData(client, "Job") == getJobIdFromName("Bauarbeiter") then
 		if cosmicGetElementData(client, "BlockStoneUsage") or getPedOccupiedVehicle(client) then
 			return
 		end
@@ -142,10 +238,11 @@ local function playerDropRock(itemID)
 					earnings = earnings + math.ceil(6 * math.random())
 				end
 				
-				cosmicSetElementData(client, "Money", cosmicGetElementData(client, "Money") + earnings)
+				--cosmicSetElementData(client, "Money", cosmicGetElementData(client, "Money") + earnings)
+				cosmicSetElementData(client, "Payday", cosmicGetElementData(client, "Payday") + earnings)
 				
 				
-				triggerClientEvent(client, "infomsg", client, "+ $" .. earnings, 100, 255, 100)
+				--triggerClientEvent(client, "infomsg", client, "+ $" .. earnings, 100, 255, 100)
 				
 				
 				setPedAnimation(client, "grenade", "weapon_throw", -1, false, false, true, false, 250, true)
