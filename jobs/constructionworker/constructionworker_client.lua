@@ -133,6 +133,13 @@ function openWindowConstructionWorker()
 		
 		triggerServerEvent("playerStartJob", getLocalPlayer(), 1, 2)
 	end)
+	addEventHandler("onDXGUIClicked", gui["job3"], function()
+		dxgui_ClearKill(gui["window"])
+		gui = {}
+		showCursor(false)
+		
+		triggerServerEvent("playerStartJob", getLocalPlayer(), 1, 3)
+	end)
 	
 	addEventHandler("onDXGUIClicked", gui["close"], function()
 		dxgui_ClearKill(gui["window"])

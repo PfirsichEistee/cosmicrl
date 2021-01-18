@@ -72,3 +72,11 @@ local function adminVehicleDelete(player, cmd)
 	end
 end
 addCommandHandler("vehdel", adminVehicleDelete)
+
+
+local function adminGetElementData(player, cmd, key)
+	if cosmicGetElementData(player, "Adminlevel") > 0 then
+		outputChatBox("   [" .. key .. "] -> " .. tostring(cosmicGetElementData(player, key)), player, 255, 0, 0)
+	end
+end
+addCommandHandler("getdata", adminGetElementData)

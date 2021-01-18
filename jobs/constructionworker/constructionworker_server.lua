@@ -37,6 +37,7 @@ local transportMarker = {
 	createMarker(-2101.65625, 204.23728942871, 34.387924957275, "cylinder", 4, 255, 0, 0, 255, nil),
 	createMarker(2706.3820800781, 882.15246582031, 8.956210899353, "cylinder", 4, 255, 0, 0, 255, nil),
 	createMarker(326.072265625, 2560.3327636719, 15.463005828857, "cylinder", 4, 255, 0, 0, 255, nil),
+	createMarker(-2129.3999023438, -97.400001525879, 34.700001525879, "cylinder", 4, 255, 0, 0, 255, nil),
 }
 for a, b in ipairs(transportMarker) do
 	setElementVisibleTo(b, getRootElement(), false)
@@ -46,6 +47,46 @@ for a, b in ipairs(transportMarker) do
 end
 
 
+
+
+local trailer = {
+	createVehicle(450, 830.29998779297, 871.20001220703, 13.5, 0, 0, 230, "COSMIC"),
+	createVehicle(450, 836.70001220703, 873, 14, 0, 0, 230, "COSMIC"),
+	createVehicle(450, 842.09997558594, 876.09997558594, 14, 0, 0, 230, "COSMIC"),
+	createVehicle(450, 847.29998779297, 879.79998779297, 14, 0, 0, 230, "COSMIC"),
+}
+
+local function stopTrailerDestroy()
+	local spawn = cosmicGetElementData(source, "Spawn")
+	
+	local veh = createVehicle(450, spawn.x, spawn.y, spawn.z, 0, 0, 230, "COSMIC")
+	cosmicSetElementData(veh, "Job", 1)
+	cosmicSetElementData(veh, "Spawn", spawn)
+	setElementFrozen(veh, true)
+	setVehicleDamageProof(veh, true)
+	
+	setVehicleVariant(veh, 0, 0)
+	
+	for a, b in ipairs(trailer) do
+		if b == source then
+			trailer[a] = veh
+			break
+		end
+	end
+end
+
+for a, b in ipairs(trailer) do
+	setElementFrozen(b, true)
+	cosmicSetElementData(b, "Job", 1)
+	setVehicleDamageProof(b, true)
+	
+	setVehicleVariant(b, 0, 0)
+	
+	local x, y, z = getElementPosition(b)
+	cosmicSetElementData(b, "Spawn", Vector3(x, y, z))
+	
+	addEventHandler("onElementDestroy", b, stopTrailerDestroy)
+end
 
 
 local function hitTransportMarker(player, matching)
@@ -88,7 +129,63 @@ local function hitTransportMarker(player, matching)
 						end, 5000, 1)
 					end
 				else -- Rohstoffe
+					local veh = getPedOccupiedVehicle(player)
+					if not veh or cosmicGetElementData(veh, "Jobber") ~= player then
+						return
+					end
+					if cmath.getElementSpeed(veh) > ((40000 / 60) / 60) then -- > 40kmh
+						triggerClientEvent(player, "infomsg", player, "Du bist zu schnell!", 255, 100, 100)
+						return
+					end
 					
+					if a == 1 then -- its the return point
+						setElementVisibleTo(source, player, false)
+						setElementVisibleTo(getAttachedElements(source)[1], player, false)
+						
+						outputChatBox("#FFFFFFChef#FFFFDD: Gute Arbeit! Deinen Lohn erhaelst du beim naechsten Zahltag!", player, 255, 255, 255, true)
+						
+						destroyElement(veh)
+						
+						cosmicSetElementData(player, "Payday", cosmicGetElementData(player, "Payday") + 350 + math.floor(100 * math.random()))
+						
+						playerQuitJob(player, true)
+					else
+						-- look for trailer
+						local trl
+						for a, b in ipairs(trailer) do
+							if cosmicGetElementData(b, "Jobber") == player then
+								trl = b
+							end
+						end
+						if trl then
+							if cmath.distElements(trl, source) < 15 then
+								destroyElement(trl)
+							else
+								outputChatBox("#FFFFFFArbeiter#FFFFDD: Du hast jetzt nicht ernsthaft den Anhaenger vergessen..?", player, 255, 255, 255, true)
+								return
+							end
+						else
+							outputChatBox("#FFFFFFArbeiter#FFFFDD: Du hast jetzt nicht ernsthaft den Anhaenger vergessen..?", player, 255, 255, 255, true)
+							return
+						end
+						
+						
+						setElementVisibleTo(source, player, false)
+						setElementVisibleTo(getAttachedElements(source)[1], player, false)
+						
+						setElementVisibleTo(transportMarker[1], player, true)
+						setElementVisibleTo(getAttachedElements(transportMarker[1])[1], player, true)
+						
+						setElementFrozen(veh, true)
+						setElementFrozen(player, true)
+						
+						setTimer(function()
+							setElementFrozen(veh, false)
+							setElementFrozen(player, false)
+							
+							outputChatBox("#FFFFFFArbeiter#FFFFDD: Danke. Jetzt musst du nur noch den Wagen zurueckfahren, dann ist Feierabend.", player, 255, 255, 255, true)
+						end, 5000, 1)
+					end
 				end
 				
 				
@@ -130,6 +227,39 @@ function startJobConstructionWorker(player, extra)
 		warpPedIntoVehicle(player, veh)
 		
 		triggerClientEvent(player, "ghostMode", player, 4000, true)
+	elseif extra == 3 then
+		if cosmicGetPlayerItem(player, 10) == 0 then -- LKW Schein
+			triggerClientEvent(player, "infomsg", player, "Du benoetigst einen LKW-Schein", 255, 100, 100)
+			return
+		end
+		local found = false
+		for a, b in ipairs(trailer) do
+			if not cosmicGetElementData(b, "Jobber") then
+				found = true
+				break
+			end
+		end
+		if not found then
+			outputChatBox("#FFFFFFChef#FFFFDD: Unsere Trucker sind gerade alle unterwegs, sorry! Du kannst hier aber ein Weilchen warten und vielleicht 'nen Kaffee trinken...", player, 255, 255, 255, true)
+			return
+		end
+		
+		cosmicSetElementData(player, "JobType", 3)
+		
+		local id = math.ceil(math.random() * (#transportMarker - 1)) + 1
+		setElementVisibleTo(transportMarker[id], player, true)
+		setElementVisibleTo(getAttachedElements(transportMarker[id])[1], player, true)
+		
+		local veh = createVehicle(514, 812.14495849609, 824.41497802734, 11.058280944824, -3.6203887462616, 6.7851667404175, 307.78686523438, "COSMIC")
+		cosmicSetElementData(veh, "Job", 1)
+		cosmicSetElementData(veh, "Jobber", player)
+		
+		warpPedIntoVehicle(player, veh)
+		
+		triggerClientEvent(player, "ghostMode", player, 4000, true)
+		
+		
+		outputChatBox("#FFFFFFChef#FFFFDD: Pass bloss auf den Anhaenger auf! Der Inhalt kann da schnell mal rausfliegen..", player, 255, 255, 255, true)
 	end
 	
 	
@@ -260,3 +390,46 @@ local function playerDropRock(itemID)
 	end
 end
 addEventHandler("playerUseItem", getRootElement(), playerDropRock)
+
+
+local function playerClaimTrailer(veh)
+	-- source == trailer
+	if cosmicGetElementData(veh, "Job") == 1 then
+		local detach = true
+		
+		local player = getVehicleController(veh)
+		
+		if player and getElementData(player, "Job") == 1 and cosmicGetElementData(veh, "Jobber") == player and cosmicGetElementData(source, "Job") == 1 and
+			(not cosmicGetElementData(source, "Jobber") or cosmicGetElementData(source, "Jobber") == player) then
+			local found = false
+			for a, b in ipairs(trailer) do
+				if cosmicGetElementData(b, "Jobber") == player and b ~= source then
+					-- already has a trailer!
+					found = true
+					
+					triggerClientEvent(player, "infomsg", player, "Du hast bereits einen Anhaenger!", 255, 100, 100)
+				end
+			end
+			
+			if not found then
+				detach = false
+				cosmicSetElementData(source, "Jobber", player)
+				setElementFrozen(source, false)
+			end
+		end
+		
+		
+		if detach then
+			setTimer(function(veh)
+				detachTrailerFromVehicle(veh)
+				
+				local vehForward = Matrix(Vector3(getElementPosition(veh)), Vector3(getElementRotation(veh))):getForward()
+				local x, y, z = getElementPosition(veh)
+				setElementPosition(veh, x + vehForward.x * 2, y + vehForward.y * 2, z + vehForward.z * 2 + 2)
+				
+				--triggerClientEvent(player, "ghostMode", player, 4000, true)
+			end, 100, 1, veh)
+		end
+	end
+end
+addEventHandler("onTrailerAttach", getRootElement(), playerClaimTrailer)
