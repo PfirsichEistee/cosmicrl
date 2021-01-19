@@ -60,20 +60,27 @@ local function enterDrivingSchoolMarker(player, matchingDimension)
 						cosmicSetElementData(player, "drivingschool", nil)
 						triggerClientEvent(player, "drivingExamStartSpeedWatch", player, false)
 						
+						
+						local warns = cosmicGetElementData(player, "ExamWarns")
+						if not warns then
+							warns = 0
+						end
+						
 						local vehHP = getElementHealth(veh)
 						if vehHP < 1000 then
 							outputChatBox("#FFFFFFFahrlehrer#FFFFDD: Aufgrund des Fahrzeugschadens erhaelst du zwei Fehlerpunkte!", player, 255, 255, 255, true)
-							cosmicSetElementData(player, "ExamWarns", cosmicGetElementData(player, "ExamWarns") + 2)
+							cosmicSetElementData(player, "ExamWarns", warns + 2)
 						end
 						
 						removePedFromVehicle(player)
 						destroyElement(veh)
 						
-						if not cosmicGetElementData(player, "ExamWarns") or cosmicGetElementData(player, "ExamWarns") <= 3 then
-							outputChatBox("#FFFFFFFahrlehrer#FFFFDD: Du hast die Pruefung mit " .. cosmicGetElementData(player, "ExamWarns") .. " Fehlerpunkten bestanden, herzlichen Glückwunsch!", player, 255, 255, 255, true)
+						
+						if warns <= 3 then
+							outputChatBox("#FFFFFFFahrlehrer#FFFFDD: Du hast die Pruefung mit " .. warns .. " Fehlerpunkten bestanden, herzlichen Glückwunsch!", player, 255, 255, 255, true)
 							triggerEvent("drivingSchoolFinish", player, "PKW Schein", "practical", true, player)
 						else
-							outputChatBox("#FFFFFFFahrlehrer#FFFFDD: Du hast " .. cosmicGetElementData(player, "ExamWarns") .. " Fehlerpunkte und die Pruefung somit nicht bestanden!", player, 255, 255, 255, true)
+							outputChatBox("#FFFFFFFahrlehrer#FFFFDD: Du hast " .. warns .. " Fehlerpunkte und die Pruefung somit nicht bestanden!", player, 255, 255, 255, true)
 							triggerEvent("drivingSchoolFinish", player, "PKW Schein", "practical", false, player)
 						end
 						

@@ -80,3 +80,39 @@ local function adminGetElementData(player, cmd, key)
 	end
 end
 addCommandHandler("getdata", adminGetElementData)
+
+local function adminSetElementData(player, cmd, key, value)
+	if cosmicGetElementData(player, "Adminlevel") > 0 then
+		if tonumber(value) ~= nil then
+			value = tonumber(value)
+		end
+		
+		key = string.gsub(key, "_", " ")
+		
+		cosmicSetElementData(player, key, value)
+		
+		adminGetElementData(player, "getdata", key)
+	end
+end
+addCommandHandler("setdata", adminSetElementData)
+
+
+local function printAdminCommands(player, cmd)
+	if cosmicGetElementData(player, "Adminlevel") > 0 then
+		local str = [[/vehown
+		-> claim the vehicle you're sitting in
+		/vehdel
+		-> delete vehicle you're sitting in (from DB too)
+		/getdata <key>
+		-> cosmicGetElementData(YOU, key)
+		/setdata <key> <value>
+		-> cosmicSetElementData(YOU, key, value)
+		-> Every '_' will be replaced as a space]]
+		
+		for i = 1, cmath.getStringMaxRows(str), 1 do
+			outputChatBox(cmath.getStringRow(str, i), player, 255, 0, 0)
+		end
+	end
+end
+addCommandHandler("adminhelp", printAdminCommands)
+addCommandHandler("admincmd", printAdminCommands)

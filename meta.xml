@@ -87,6 +87,10 @@
 	<script src="factions/factions_shared.lua" type="shared"/>
 	
 	
+	<!-- GROUPS -->
+	<script src="groups/groups_server.lua" type="server"/>
+	
+	
 	<!-- JOBS -->
 	<script src="jobs/jobs_shared.lua" type="shared"/>
 	<script src="jobs/jobs_server.lua" type="server"/>

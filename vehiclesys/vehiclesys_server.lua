@@ -165,38 +165,37 @@ addEventHandler("onVehicleExplode", getRootElement(), deleteVehicleOnExplode)
 
 
 local truckList = { 459, 482, 418, 413, 440, 416, 433, 427, 490, 528, 407, 544, 432, 601, 428, 431, 437, 408, 552, 499, 609, 498, 524, 532, 578, 486, 406, 573, 455, 588, 403, 423, 414, 443, 515, 514, 531, 456, 483, 508, }
+function getNeededVehicleLicense(vehID)
+	local t = getVehicleType(vehID)
+	
+	if t == "Automobile" then
+		for a, b in ipairs(truckList) do
+			if b == vehID then
+				-- its a truck
+				return getItemID("LKW Schein")
+			end
+		end
+		
+		-- its a car
+		return getItemID("PKW Schein")
+	elseif t == "Bike" then
+		return getItemID("Motorrad Schein")
+	elseif t == "Helicopter" then
+		return getItemID("Helikopter Schein")
+	elseif t == "Plane" then
+		return getItemID("Flugzeug Schein")
+	end
+end
+
+
 local function stopVehicleEnter(player)
 	if getElementType(player) == "player" then
-		local t = getVehicleType(source)
+		local necID = getNeededVehicleLicense(getElementModel(source))
 		
-		if t == "Automobile" then
-			local model = getElementModel(source)
-			for a, b in ipairs(truckList) do
-				if b == model then
-					-- its a truck
-					if cosmicGetPlayerItem(player, getItemID("LKW Schein")) <= 0 then
-						triggerClientEvent(player, "infomsg", player, "Du hast keinen LKW Schein", 255, 100, 100)
-						cancelEvent()
-					end
-					return
-				end
-			end
+		if cosmicGetPlayerItem(player, necID) <= 0 then
+			cancelEvent()
 			
-			
-			-- its a car
-			if cosmicGetPlayerItem(player, getItemID("PKW Schein")) <= 0 then
-				triggerClientEvent(player, "infomsg", player, "Du hast keinen PKW Schein", 255, 100, 100)
-				cancelEvent()
-			end
-		elseif t == "Bike" and cosmicGetPlayerItem(player, getItemID("Motorrad Schein")) <= 0 then
-			triggerClientEvent(player, "infomsg", player, "Du hast keinen Motorrad Schein", 255, 100, 100)
-			cancelEvent()
-		elseif t == "Helicopter" and cosmicGetPlayerItem(player, getItemID("Helikopter Schein")) <= 0 then
-			triggerClientEvent(player, "infomsg", player, "Du hast keinen Helikopter Schein", 255, 100, 100)
-			cancelEvent()
-		elseif t == "Plane" and cosmicGetPlayerItem(player, getItemID("Flugzeug Schein")) <= 0 then
-			triggerClientEvent(player, "infomsg", player, "Du hast keinen Flugzeug Schein", 255, 100, 100)
-			cancelEvent()
+			triggerClientEvent(player, "infomsg", player, "Du hast keinen " .. getItemName(necID), 255, 100, 100)
 		end
 	end
 end

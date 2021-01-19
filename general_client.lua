@@ -93,6 +93,10 @@ addEventHandler("playClientSound", getRootElement(), playClientSound)
 
 
 
+
+
+--[[ USEFUL FUNCTIONS ]]--
+
 -- Object movement
 function moveObjectOnTrail(element, t, ...) -- (element, timeInSeconds, Vector3 point1, Vector3 point2, Vector3 point...)
 	local points = {...}
@@ -131,33 +135,23 @@ function moveObjectOnTrail(element, t, ...) -- (element, timeInSeconds, Vector3 
 				
 				moveObject(element, phTime * 1000, tx, ty, tz)
 			end, phTime * 1000, 1, element, points[i].x, points[i].y, points[i].z, points[i + 1].x, points[i + 1].y, points[i + 1].z, timePerUnit)
-			--[[setTimer(function(m, i)
-				setElementPosition(m.element, m.points[i].x, m.points[i].y, m.points[i].z)
-				
-				local phTime = cmath.dist3D(m.points[i].x, m.points[i].y, m.points[i].z,
-					m.points[i + 1].x, m.points[i + 1].y, m.points[i + 1].z) * m.timePerUnit
-				
-				moveObject(m.element, phTime * 1000, m.points[i + 1].x, m.points[i + 1].y, m.points[i + 1].z)
-				
-				outputChatBox("New point! " .. i)
-			end, phTime * 1000, 1, movement, i)]]
-			
 			
 			phTime = phTime + cmath.dist3D(points[i].x, points[i].y, points[i].z, points[i + 1].x, points[i + 1].y, points[i + 1].z) * timePerUnit
 		end
 	end
+end
+
+
+function dxDrawTextBordered(text, leftX, topY, rightX, bottomY, color, scaleXY, scaleY, font, alignX, alignY, clip, wordBreak, postGUI, colorCoded)
+	local phX, phY = 1, 1
+	for i = 1, 5, 1 do
+		dxDrawText(text, leftX + phX * 4, topY + phY * 4, rightX + phX * 4, bottomY + phY * 4, tocolor(0, 0, 0, 255), scaleXY, scaleY, font, alignX, alignY, clip, wordBreak, postGUI, colorCoded)
+		
+		phX = -phX
+		if i == 3 then
+			phY = -1
+		end
+	end
 	
-	
-	--[[if #points > 1 then
-		setTimer(function(m)
-			setElementPosition(m.element, m.points[m.current].x, m.points[m.current].y, m.points[m.current].z)
-			
-			local phTime = cmath.dist3D(m.points[m.current].x, m.points[m.current].y, m.points[m.current].z,
-				m.points[m.current + 1].x, m.points[m.current + 1].y, m.points[m.current + 1].z) * m.timePerUnit
-			
-			moveObject(m.element, phTime * 1000, m.points[m.current + 1].x, m.points[m.current + 1].y, m.points[m.current + 1].z)
-			
-			m.current = m.current + 1
-		end, phTime * 1000, #points - 1, movement)
-	end]]
+	dxDrawText(text, leftX, topY, rightX, bottomY, color, scaleXY, scaleY, font, alignX, alignY, clip, wordBreak, postGUI, colorCoded)
 end

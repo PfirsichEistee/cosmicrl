@@ -71,10 +71,3 @@ end
 addCommandHandler("quitjob", playerQuitJob)
 addEventHandler("onPlayerQuit", getRootElement(), playerQuitJob)
 addEventHandler("onPlayerWasted", getRootElement(), playerQuitJob)
-
-
-
-local function cmd(player)
-	setElementPosition(player, 842.06604003906, 856.48767089844, 13.006146430969)
-end
-addCommandHandler("ok", cmd)
