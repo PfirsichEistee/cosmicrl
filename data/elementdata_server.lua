@@ -3,11 +3,12 @@ local edata = {}
 
 
 local syncdata = {
-	["Money"] = true, ["Bankmoney"] = true, ["Spawn"] = true, ["GroupID"] = true, ["GroupRank"] = true, 
+	["Money"] = true,	["Bankmoney"] = true,	["Spawn"] = true,	["GroupID"] = true,	["GroupRank"] = true,
+	["EXP"] = true,		["Wanteds"] = true,
 }
 
 local allsyncdata = {
-	["Adminlevel"] = true, ["Online"] = true, ["Playtime"] = true, ["FactionID"] = true, ["FactionRank"] = true, 
+	["Adminlevel"] = true,	["Online"] = true,	["Playtime"] = true,	["FactionID"] = true,	["FactionRank"] = true,
 }
 
 

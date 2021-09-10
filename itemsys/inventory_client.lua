@@ -35,12 +35,15 @@ end
 
 local function invClick()
 	local item = dxgui_InventoryGetSelectedItem(gui["inv"])
-	if source == gui["use"] then
-		triggerServerEvent("playerUseItem", getLocalPlayer(), item.id)
-	elseif source == gui["drop"] then
-		
-	elseif source == gui["trash"] then
-		
+	
+	if item then
+		if source == gui["use"] then
+			triggerServerEvent("playerUseItem", getLocalPlayer(), item.id)
+		elseif source == gui["drop"] then
+			
+		elseif source == gui["trash"] then
+			
+		end
 	end
 end
 
@@ -144,7 +147,7 @@ local function openInventory()
 		end
 	end
 end
-bindKey("i", "down", openInventory)
+cosmicBindKey("i", "down", openInventory)
 
 
 local function updateOpenedWindow(id, amount)

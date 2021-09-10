@@ -33,6 +33,19 @@ local bloodAnim = 0
 local deathAnim = 0
 
 
+-- Level
+local lvlBarW = 0.3 * screenX
+local lvlBarH = 0.008 * screenY
+local lvlBarX = (screenX - lvlBarW) / 2
+local lvlBarY = lvlBarH * 5 + lvlBarH / 2
+local lvlImgSize = lvlBarH * 8
+local lvlFontSize = (1 / dxGetFontHeight(1, "pricedown")) * lvlImgSize * 0.6
+local lvlLevel = 36
+local lvlExp = 0 -- in % from 0 to 1
+local lvlTimer = 0
+
+
+
 local minigame = {
 	pixsize = (screenY / 4) * 3,
 	size = 25,
@@ -62,6 +75,51 @@ local function hudText(text, x, y, tx, ty, color, fontSize, font, aX, aY)
 	dxDrawText(text, x - plus, y - plus, tx - plus, ty - plus, tocolor(0, 0, 0, 255), fontSize, font, aX, aY)
 	
 	dxDrawText(text, x, y, tx, ty, color, fontSize, font, aX, aY)
+end
+
+
+local function drawLevel()
+	local totalExp = cosmicClientGetElementData(getLocalPlayer(), "EXP") or 0
+	local targetLvl = getLevel(totalExp)
+	
+	totalExp = totalExp - getExp(lvlLevel)
+	local targetExp = totalExp / (getExp(lvlLevel + 1) - getExp(lvlLevel))
+	
+	if lvlLevel > targetLvl then
+		lvlLevel = targetLvl
+	elseif lvlLevel == targetLvl and lvlExp > targetExp then
+		lvlExp = targetExp
+	end
+	
+	if lvlLevel == targetLvl and math.abs(lvlExp - targetExp) <= 0.001 then
+		if lvlTimer <= 0 then
+			return
+		end
+		lvlTimer = lvlTimer - delta
+	else
+		lvlTimer = 4
+	end
+	
+	if lvlLevel ~= targetLvl then
+		lvlExp = cmath.lerp(lvlExp, 1, delta * 10)
+		
+		if math.abs(lvlExp - 1) <= 0.01 then
+			lvlLevel = lvlLevel + 1
+			lvlExp = 0
+		end
+	else
+		lvlExp = cmath.lerp(lvlExp, targetExp, delta * 10)
+	end
+	
+	
+	
+	hudRect(lvlBarX, lvlBarY - lvlBarH / 2, lvlBarW, lvlBarH, 100, 100, 255, lvlExp)
+	
+	dxDrawImage(lvlBarX - lvlImgSize / 2, lvlBarY - lvlImgSize / 2, lvlImgSize, lvlImgSize, "images/hud/level.png", 0, 0, 0)
+	dxDrawImage(lvlBarX + lvlBarW - lvlImgSize / 2, lvlBarY - lvlImgSize / 2, lvlImgSize, lvlImgSize, "images/hud/level.png", 0, 0, 0)
+	
+	hudText(lvlLevel, lvlBarX, lvlBarY, lvlBarX, lvlBarY, tocolor(255, 255, 255, 255), lvlFontSize, "pricedown", "center", "center")
+	hudText(lvlLevel + 1, lvlBarX + lvlBarW, lvlBarY, lvlBarX + lvlBarW, lvlBarY, tocolor(255, 255, 255, 255), lvlFontSize, "pricedown", "center", "center")
 end
 
 
@@ -157,6 +215,7 @@ local function render()
 	
 	drawMinimap()
 	drawGauge()
+	drawLevel()
 	
 	
 	-- DEVELOPMENT
@@ -175,11 +234,11 @@ local function render()
 	ry = math.floor(ry * 1000) / 1000
 	rz = math.floor(rz * 1000) / 1000
 	
-	dxDrawText(x .. ", " .. y .. ", " .. z .. "\n" .. rx .. ", " .. ry .. ", " .. rz .. "\nType /dp to print", screenX * 0.3 + sppp, screenY * 0.01 + sppp, screenX, screenY, tocolor(0, 0, 0, 255), 2)
-	dxDrawText(x .. ", " .. y .. ", " .. z .. "\n" .. rx .. ", " .. ry .. ", " .. rz .. "\nType /dp to print", screenX * 0.3 - sppp, screenY * 0.01 + sppp, screenX, screenY, tocolor(0, 0, 0, 255), 2)
-	dxDrawText(x .. ", " .. y .. ", " .. z .. "\n" .. rx .. ", " .. ry .. ", " .. rz .. "\nType /dp to print", screenX * 0.3 + sppp, screenY * 0.01 - sppp, screenX, screenY, tocolor(0, 0, 0, 255), 2)
-	dxDrawText(x .. ", " .. y .. ", " .. z .. "\n" .. rx .. ", " .. ry .. ", " .. rz .. "\nType /dp to print", screenX * 0.3 - sppp, screenY * 0.01 - sppp, screenX, screenY, tocolor(0, 0, 0, 255), 2)
-	dxDrawText(x .. ", " .. y .. ", " .. z .. "\n" .. rx .. ", " .. ry .. ", " .. rz .. "\nType /dp to print", screenX * 0.3, screenY * 0.01, screenX, screenY, tocolor(255, 255, 255, 255), 2)
+	dxDrawText(x .. ", " .. y .. ", " .. z .. "\n" .. rx .. ", " .. ry .. ", " .. rz .. "\nType /dp to print", screenX * 0.3 + sppp, screenY * 0.08 + sppp, screenX, screenY, tocolor(0, 0, 0, 255), 2)
+	dxDrawText(x .. ", " .. y .. ", " .. z .. "\n" .. rx .. ", " .. ry .. ", " .. rz .. "\nType /dp to print", screenX * 0.3 - sppp, screenY * 0.08 + sppp, screenX, screenY, tocolor(0, 0, 0, 255), 2)
+	dxDrawText(x .. ", " .. y .. ", " .. z .. "\n" .. rx .. ", " .. ry .. ", " .. rz .. "\nType /dp to print", screenX * 0.3 + sppp, screenY * 0.08 - sppp, screenX, screenY, tocolor(0, 0, 0, 255), 2)
+	dxDrawText(x .. ", " .. y .. ", " .. z .. "\n" .. rx .. ", " .. ry .. ", " .. rz .. "\nType /dp to print", screenX * 0.3 - sppp, screenY * 0.08 - sppp, screenX, screenY, tocolor(0, 0, 0, 255), 2)
+	dxDrawText(x .. ", " .. y .. ", " .. z .. "\n" .. rx .. ", " .. ry .. ", " .. rz .. "\nType /dp to print", screenX * 0.3, screenY * 0.08, screenX, screenY, tocolor(255, 255, 255, 255), 2)
 end
 addEventHandler("onClientRender", root, render)
 
@@ -341,6 +400,14 @@ addEventHandler("onClientKey", getRootElement(), startMinigame)
 
 function setClientHUDVisible(v)
 	visible = v
+	
+	if visible then
+		local totalExp = cosmicClientGetElementData(getLocalPlayer(), "EXP") or 0
+		lvlLevel = getLevel(totalExp)
+		
+		totalExp = totalExp - getExp(lvlLevel)
+		lvlExp = totalExp / (getExp(lvlLevel + 1) - getExp(lvlLevel))
+	end
 	
 	setPlayerHudComponentVisible("ammo", false)
 	setPlayerHudComponentVisible("armour", false)

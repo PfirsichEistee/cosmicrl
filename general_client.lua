@@ -11,6 +11,9 @@ local ghostActive = false
 local ghostTimer = -1
 local ghostPlayer
 
+local eventHandler = {}
+local bindKeys = {}
+
 
 
 function clearChat()
@@ -92,6 +95,90 @@ end
 addEventHandler("playClientSound", getRootElement(), playClientSound)
 
 
+local function preEventHandler(...)
+	-- "this" is the element the handler is attached to
+	-- "eventName" is self explanatory
+	
+	for a, b in ipairs(eventHandler) do
+		if b.element == this and b.event == eventName then
+			if b.online == false or getElementType(b.element) ~= "player" then
+				b.func(...)
+			else
+				if cosmicClientGetElementData(b.element, "Online") == true then
+					b.func(...)
+				end
+			end
+			
+			break
+		end
+	end
+end
+
+function cosmicAddEventHandler(event, element, func, online)
+	online = online or true
+	
+	local new = {
+		event = event,
+		element = element,
+		func = func,
+		online = online,
+	}
+	
+	table.insert(eventHandler, new)
+	addEventHandler(event, element, preEventHandler)
+end
+
+function cosmicRemoveEventHandler(event, element, func)
+	for a, b in ipairs(eventHandler) do
+		if b.event == event and b.element == element and b.func == func then
+			removeEventHandler(event, element, preEventHandler)
+			table.remove(eventHandler, a)
+			
+			break
+		end
+	end
+end
+
+
+local function bindKeyPressed(key, pressed)
+	if not cosmicClientGetElementData(getLocalPlayer(), "Online") then
+		return
+	end
+	
+	for a, b in ipairs(bindKeys) do
+		if b.key == key then
+			if b.state == "both" or pressed and b.state == "down" or not pressed and b.state == "up" then
+				b.func(b.key, b.state, unpack(b.args))
+				break
+			end
+		end
+	end
+end
+addEventHandler("onClientKey", root, bindKeyPressed)
+
+function cosmicBindKey(key, state, func, ...)
+	local new = {
+		key = key,
+		state = state,
+		func = func,
+		args = {...},
+	}
+	
+	table.insert(bindKeys, new)
+end
+
+function cosmicUnbindKey(key, state, func)
+	for a, b in ipairs(bindKeys) do
+		if b.key == key then
+			if state == nil or b.state == state then
+				if func == nil or b.func == func then
+					table.remove(bindKeys, a)
+					break
+				end
+			end
+		end
+	end
+end
 
 
 

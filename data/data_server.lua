@@ -8,12 +8,12 @@ playerID = {}
 
 
 local function mysql_connect()
-	dbHandler = dbConnect("mysql", "dbname=cosmicdb;host=127.0.0.1;port=3306", MYSQLUSER, MYSQLPASSWORD)
+	dbHandler = dbConnect("mysql", "dbname=cosmicrl;host=127.0.0.1;port=3306", MYSQLUSER, MYSQLPASSWORD)
 	
 	if dbHandler then
-		outputDebugString("\n[MYSQL] Successfully connected to database!", 4, 0, 255, 0)
+		outputDebugString("\n\n[MYSQL] Successfully connected to database!", 4, 0, 255, 0)
 	else
-		outputDebugString("\n[MYSQL] Couldn't connect to database!", 4, 255, 0, 0)
+		outputDebugString("\n\n[MYSQL] Couldn't connect to database!", 4, 255, 0, 0)
 	end
 	
 	

@@ -23,3 +23,8 @@ function cosmicSpawnPlayer(player, id)
 	
 	toggleAllControls(player, true)
 end
+
+
+function cosmicGetSpawnPosition(id)
+	return spawnPoint[id][1], spawnPoint[id][2], spawnPoint[id][3]
+end

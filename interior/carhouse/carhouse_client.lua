@@ -77,6 +77,7 @@ local function changeVehicle(button, pressed)
 					triggerServerEvent("playerCarhouseLeave", getLocalPlayer(), "buy", vehID)
 				else
 					infobox("Du hast nicht genug Geld!", 2, 255, 75, 75)
+					return
 				end
 			else
 				triggerServerEvent("playerCarhouseLeave", getLocalPlayer(), "exit", nil)

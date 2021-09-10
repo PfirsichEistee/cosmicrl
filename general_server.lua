@@ -5,6 +5,8 @@ addEvent("onMinuteTick", false)
 
 local weather = {} -- weather[HOUR 0-23] = WEATHER-ID
 
+local eventHandler = {}
+
 
 local function hourTick()
 	setWeather(weather[getRealTime().hour])
@@ -65,8 +67,62 @@ end
 addEventHandler("onResourceStart", resourceRoot, cosmicGeneralStart)
 
 
+local function cosmicGeneralQuit()
+	for a, b in ipairs(getElementsByType("player")) do
+		setElementPosition(b, cosmicGetSpawnPosition(0))
+	end
+end
+addEventHandler("onResourceStop", resourceRoot, cosmicGeneralQuit)
+
+
 function setGhostMode(player, millis, waitForInput)
 	triggerClientEvent(player, "ghostMode", player, millis, waitForInput)
+end
+
+
+
+local function preEventHandler(...)
+	-- "this" is the element the handler is attached to
+	-- "eventName" is self explanatory
+	
+	for a, b in ipairs(eventHandler) do
+		if b.element == this and b.event == eventName then
+			if b.online == false or getElementType(b.element) ~= "player" then
+				b.func(...)
+			else
+				if cosmicGetElementData(b.element, "Online") == true then
+					b.func(...)
+				end
+			end
+			
+			break
+		end
+	end
+end
+
+function cosmicAddEventHandler(event, element, func, online)
+	online = online or true
+	
+	local new = {
+		event = event,
+		element = element,
+		func = func,
+		online = online,
+	}
+	
+	table.insert(eventHandler, new)
+	addEventHandler(event, element, preEventHandler)
+end
+
+function cosmicRemoveEventHandler(event, element, func)
+	for a, b in ipairs(eventHandler) do
+		if b.event == event and b.element == element and b.func == func then
+			removeEventHandler(event, element, preEventHandler)
+			table.remove(eventHandler, a)
+			
+			break
+		end
+	end
 end
 
 

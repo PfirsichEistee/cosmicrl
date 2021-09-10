@@ -102,6 +102,10 @@ local function updatePlayerList()
 			end
 		end
 		
+		if not iEnd then
+			iEnd = #playerList
+		end
+		
 		if found and iStart < iEnd then
 			for i = iStart, iEnd - 1, 1 do
 				local highest = i

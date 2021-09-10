@@ -75,3 +75,27 @@ function getTokenString(...)
 	
 	return str
 end
+
+
+function getLevel(exp)
+	local lvl = 1
+	
+	while getExp(lvl) < exp do
+		lvl = lvl + 1
+	end
+	
+	return lvl - 1
+end
+
+function getExp(level)
+	if level <= 0 then
+		return 0
+	end
+	
+	return 100 * math.pow(2, level - 1)
+end
+
+
+
+
+

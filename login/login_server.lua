@@ -126,7 +126,7 @@ local function registerPlayer(password, day, month, year, gender)
 		
 		dbExec(dbHandler, "INSERT INTO playerdata (ID, Adminlevel, Spawn, Money, Bankmoney, Skin, Playtime, FactionID, FactionRank, GroupID, GroupRank) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newID, start.admin, start.spawn, start.money, start.bankmoney, start.skin, start.playtime, 0, 0, 0, 0)
 		
-		dbExec(dbHandler, "INSERT INTO inventory (ID, Items) VALUES (?, ?)", newID, "")
+		dbExec(dbHandler, "INSERT INTO inventory (ID, Items, Weapons) VALUES (?, ?, ?)", newID, "", "")
 		cosmicLoadPlayerInventory(newID)
 		
 		

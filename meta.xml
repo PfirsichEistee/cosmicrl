@@ -44,6 +44,8 @@
 	
 	<script src="UI/dxgui_preparation_grid.lua" type="client"/>
 	
+	<script src="UI/self_client.lua" type="client"/>
+	
 	
 	<!-- LOGIN -->
 	<script src="login/login_server.lua" type="server"/>
@@ -196,6 +198,7 @@
 	<file src="images/hud/fuel-needle.png"/>
 	<file src="images/hud/dmg.png"/>
 	<file src="images/hud/blood.png"/>
+	<file src="images/hud/level.png"/>
 	
 	<file src="images/map/map.jpg"/>
 	<file src="images/map/noise1.png"/>

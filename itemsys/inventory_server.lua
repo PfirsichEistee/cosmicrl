@@ -105,6 +105,7 @@ end
 
 function cosmicLoadPlayerInventory(userID)
 	if not inv[userID] then
+		print("loading player inv")
 		local result = dbPoll(dbQuery(dbHandler, "SELECT Items, Weapons FROM inventory WHERE ID=?", userID), -1)
 		
 		if result and result[1] then
