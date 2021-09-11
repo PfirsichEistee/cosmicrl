@@ -8,6 +8,7 @@ addEvent("dxgui_OnClick", false)
 mouseX, mouseY = nil, nil
 
 titleHeight = 0.035 * screenY
+tabsHeight = 0.7 * titleHeight -- not used by dxgui
 
 delta = 0 -- Delta time in seconds
 local lastTime = getTickCount() -- getTichCount() returns millis

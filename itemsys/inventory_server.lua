@@ -105,7 +105,6 @@ end
 
 function cosmicLoadPlayerInventory(userID)
 	if not inv[userID] then
-		print("loading player inv")
 		local result = dbPoll(dbQuery(dbHandler, "SELECT Items, Weapons FROM inventory WHERE ID=?", userID), -1)
 		
 		if result and result[1] then
@@ -129,7 +128,7 @@ function cosmicLoadPlayerInventory(userID)
 				end
 			end
 			
-			table.insert(inv, new)
+			table.insert(inv, new) -- this may be wrong?? inv is a dictionary
 			
 			local player = getPlayerFromName(IDToName(userID))
 			triggerClientEvent(player, "clientSyncInventory", player, new, true)

@@ -42,8 +42,20 @@ local function dataPlayerLeave()
 		outputDebugString("Player '" .. getPlayerName(source) .. "' left. Saving data...", 4, 0, 255, 0)
 		cosmicUnloadAndSavePlayerInventory(source)
 		
-		dbExec(dbHandler, "UPDATE playerdata SET Adminlevel=?, Spawn=?, Money=?, Bankmoney=?, Skin=?, Playtime=?, Payday=?, FactionID=?, FactionRank=?, GroupID=?, GroupRank=? WHERE id=" .. NameToID(getPlayerName(source)),
-			cosmicGetElementData(source, "Adminlevel"), cosmicGetElementData(source, "Spawn"), cosmicGetElementData(source, "Money"), cosmicGetElementData(source, "Bankmoney"), cosmicGetElementData(source, "Skin"), cosmicGetElementData(source, "Playtime"), cosmicGetElementData(source, "Payday"), cosmicGetElementData(source, "FactionID"), cosmicGetElementData(source, "FactionRank"), cosmicGetElementData(source, "GroupID"), cosmicGetElementData(source, "GroupRank"))
+		dbExec(dbHandler, "UPDATE playerdata SET Adminlevel=?, Spawn=?, Money=?, Bankmoney=?, Skin=?, Exp=?, Playtime=?, Payday=?, Wanteds=?, FactionID=?, FactionRank=?, GroupID=?, GroupRank=? WHERE id=" .. NameToID(getPlayerName(source)),
+			cosmicGetElementData(source, "Adminlevel"),
+			cosmicGetElementData(source, "Spawn"),
+			cosmicGetElementData(source, "Money"),
+			cosmicGetElementData(source, "Bankmoney"),
+			cosmicGetElementData(source, "Skin"),
+			cosmicGetElementData(source, "Exp"),
+			cosmicGetElementData(source, "Playtime"),
+			cosmicGetElementData(source, "Payday"),
+			cosmicGetElementData(source, "Wanteds"),
+			cosmicGetElementData(source, "FactionID"),
+			cosmicGetElementData(source, "FactionRank"),
+			cosmicGetElementData(source, "GroupID"),
+			cosmicGetElementData(source, "GroupRank"))
 		
 		cosmicClearElementData(source)
 	end

@@ -25,23 +25,6 @@ local function formatPlaytime(m)
 	end
 	
 	return h .. " : " .. m
-	
-	--[[local h = math.floor(m / 60)
-	m = m - h * 60
-	
-	local d = math.floor(h / 24)
-	h = h - d * 24
-	
-	local str = m .. "m"
-	
-	if h > 0 or d > 0 then
-		str = h .. "h " .. str
-	end
-	if d > 0 then
-		str = d .. "d " .. str
-	end
-	
-	return str]]
 end
 
 

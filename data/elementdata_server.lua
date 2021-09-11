@@ -4,7 +4,7 @@ local edata = {}
 
 local syncdata = {
 	["Money"] = true,	["Bankmoney"] = true,	["Spawn"] = true,	["GroupID"] = true,	["GroupRank"] = true,
-	["EXP"] = true,		["Wanteds"] = true,
+	["Exp"] = true,		["Wanteds"] = true,
 }
 
 local allsyncdata = {
@@ -38,4 +38,10 @@ function cosmicClearElementData(element)
 	if edata[element] then
 		edata[element] = nil
 	end
+end
+
+
+-- Only sets data on client and "forgets" it here
+function cosmicSetClientElementData(player, name, data)
+	triggerClientEvent(player, "elementDataSync", player, player, name, data)
 end

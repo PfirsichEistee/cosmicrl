@@ -141,7 +141,7 @@ end
 
 
 local function bindKeyPressed(key, pressed)
-	if not cosmicClientGetElementData(getLocalPlayer(), "Online") then
+	if not cosmicClientGetElementData(getLocalPlayer(), "Online") or isChatBoxInputActive() then
 		return
 	end
 	

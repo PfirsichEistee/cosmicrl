@@ -39,7 +39,7 @@ local function loginPlayer(password)
 	if password then
 		local id = NameToID(getPlayerName(client))
 		
-		local playerResult = dbPoll(dbQuery(dbHandler, "SELECT Password FROM player WHERE ID=?", id), -1)
+		local playerResult = dbPoll(dbQuery(dbHandler, "SELECT Password, Registerdate FROM player WHERE ID=?", id), -1)
 		
 		if playerResult and playerResult[1] then
 			if playerResult[1]["Password"] == password then
@@ -54,14 +54,17 @@ local function loginPlayer(password)
 					cosmicSetElementData(client, "Money", dataResult[1]["Money"])
 					cosmicSetElementData(client, "Bankmoney", dataResult[1]["Bankmoney"])
 					cosmicSetElementData(client, "Skin", dataResult[1]["Skin"])
+					cosmicSetElementData(client, "Exp", dataResult[1]["Exp"])
 					cosmicSetElementData(client, "Playtime", dataResult[1]["Playtime"])
 					cosmicSetElementData(client, "Payday", dataResult[1]["Payday"])
+					cosmicSetElementData(client, "Wanteds", dataResult[1]["Wanteds"])
 					cosmicSetElementData(client, "FactionID", dataResult[1]["FactionID"])
 					cosmicSetElementData(client, "FactionRank", dataResult[1]["FactionRank"])
 					cosmicSetElementData(client, "GroupID", dataResult[1]["GroupID"])
 					cosmicSetElementData(client, "GroupRank", dataResult[1]["GroupRank"])
 					
 					cosmicSetElementData(client, "Online", true)
+					cosmicSetClientElementData(client, "Registerdate", playerResult[1]["Registerdate"])
 					--cosmicSetElementData(client, "Onlinetime", getTimestamp(0))
 					
 					
@@ -74,6 +77,7 @@ local function loginPlayer(password)
 					cosmicSpawnPlayer(client)
 					
 					cosmicLoadPlayerInventory(id)
+					cosmicLoadPlayerStats(id)
 				else
 					kickPlayer(client, "Unbekannter Fehler")
 				end
@@ -124,10 +128,12 @@ local function registerPlayer(password, day, month, year, gender)
 			playtime = 0,
 		}
 		
-		dbExec(dbHandler, "INSERT INTO playerdata (ID, Adminlevel, Spawn, Money, Bankmoney, Skin, Playtime, FactionID, FactionRank, GroupID, GroupRank) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newID, start.admin, start.spawn, start.money, start.bankmoney, start.skin, start.playtime, 0, 0, 0, 0)
+		dbExec(dbHandler, "INSERT INTO playerdata (ID, Adminlevel, Spawn, Money, Bankmoney, Skin, Exp, Playtime, Payday, Wanteds, FactionID, FactionRank, GroupID, GroupRank) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+			newID, start.admin, start.spawn, start.money, start.bankmoney, start.skin, 0, start.playtime, 0, 0, 0, 0, 0, 0)
 		
 		dbExec(dbHandler, "INSERT INTO inventory (ID, Items, Weapons) VALUES (?, ?, ?)", newID, "", "")
 		cosmicLoadPlayerInventory(newID)
+		cosmicLoadPlayerStats(newID)
 		
 		
 		cosmicSetElementData(client, "Adminlevel", start.admin)
@@ -135,14 +141,17 @@ local function registerPlayer(password, day, month, year, gender)
 		cosmicSetElementData(client, "Money", start.money)
 		cosmicSetElementData(client, "Bankmoney", start.bankmoney)
 		cosmicSetElementData(client, "Skin", start.skin)
+		cosmicSetElementData(client, "Exp", 0)
 		cosmicSetElementData(client, "Playtime", start.playtime)
 		cosmicSetElementData(client, "Payday", 0)
+		cosmicSetElementData(client, "Wanteds", 0)
 		cosmicSetElementData(client, "FactionID", 0)
 		cosmicSetElementData(client, "FactionRank", 0)
 		cosmicSetElementData(client, "GroupID", 0)
 		cosmicSetElementData(client, "GroupRank", 0)
 		
 		cosmicSetElementData(client, "Online", true)
+		cosmicSetClientElementData(client, "Registerdate", getCurrentDate())
 		--cosmicSetElementData(client, "Onlinetime", getTimestamp(0))
 		
 		

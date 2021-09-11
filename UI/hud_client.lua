@@ -79,7 +79,7 @@ end
 
 
 local function drawLevel()
-	local totalExp = cosmicClientGetElementData(getLocalPlayer(), "EXP") or 0
+	local totalExp = cosmicClientGetElementData(getLocalPlayer(), "Exp") or 0
 	local targetLvl = getLevel(totalExp)
 	
 	totalExp = totalExp - getExp(lvlLevel)
@@ -402,7 +402,7 @@ function setClientHUDVisible(v)
 	visible = v
 	
 	if visible then
-		local totalExp = cosmicClientGetElementData(getLocalPlayer(), "EXP") or 0
+		local totalExp = cosmicClientGetElementData(getLocalPlayer(), "Exp") or 0
 		lvlLevel = getLevel(totalExp)
 		
 		totalExp = totalExp - getExp(lvlLevel)

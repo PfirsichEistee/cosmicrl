@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 10, 2021 at 09:19 PM
+-- Generation Time: Sep 11, 2021 at 04:25 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.10
 
@@ -55,7 +55,7 @@ CREATE TABLE `player` (
 --
 
 INSERT INTO `player` (`ID`, `Username`, `Password`, `IP`, `Serial`, `Registerdate`, `Birthday`, `LastLogin`) VALUES
-(1, 'Username', 'ce73e37b12f2a0cc93ff4cdc9540f91d2ec93ac9568658fb9ff7e50cccb2e418', '192.168.0.73', '71A8DF073C36AEB2B0849AD6B36E0602', '09.09.2021', '27.06.2002', '10.09.2021');
+(1, 'Username', 'ce73e37b12f2a0cc93ff4cdc9540f91d2ec93ac9568658fb9ff7e50cccb2e418', '192.168.0.73', '71A8DF073C36AEB2B0849AD6B36E0602', '09.09.2021', '27.06.2002', '11.09.2021');
 
 -- --------------------------------------------------------
 
@@ -70,8 +70,10 @@ CREATE TABLE `playerdata` (
   `Money` int(11) NOT NULL,
   `Bankmoney` int(11) NOT NULL,
   `Skin` int(4) NOT NULL,
+  `Exp` int(11) NOT NULL,
   `Playtime` int(11) NOT NULL,
   `Payday` int(11) NOT NULL,
+  `Wanteds` int(2) NOT NULL,
   `FactionID` int(2) NOT NULL,
   `FactionRank` int(2) NOT NULL,
   `GroupID` int(2) NOT NULL,
@@ -82,8 +84,43 @@ CREATE TABLE `playerdata` (
 -- Dumping data for table `playerdata`
 --
 
-INSERT INTO `playerdata` (`ID`, `Adminlevel`, `Spawn`, `Money`, `Bankmoney`, `Skin`, `Playtime`, `Payday`, `FactionID`, `FactionRank`, `GroupID`, `GroupRank`) VALUES
-(1, 0, 0, 950, 300, 29, 129, 0, 0, 0, 0, 0);
+INSERT INTO `playerdata` (`ID`, `Adminlevel`, `Spawn`, `Money`, `Bankmoney`, `Skin`, `Exp`, `Playtime`, `Payday`, `Wanteds`, `FactionID`, `FactionRank`, `GroupID`, `GroupRank`) VALUES
+(1, 0, 0, 950, 300, 29, 0, 207, 0, 0, 0, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `playerstats`
+--
+
+CREATE TABLE `playerstats` (
+  `ID` int(11) NOT NULL,
+  `Achievements` text NOT NULL,
+  `Kills` int(11) NOT NULL,
+  `Headshots` int(11) NOT NULL,
+  `Deaths` int(11) NOT NULL,
+  `Revivals` int(11) NOT NULL,
+  `Jail` int(11) NOT NULL,
+  `Gangwars` int(11) NOT NULL,
+  `Bans` int(11) NOT NULL,
+  `LastBan` varchar(10) NOT NULL,
+  `Warns` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `playerstats`
+--
+
+INSERT INTO `playerstats` (`ID`, `Achievements`, `Kills`, `Headshots`, `Deaths`, `Revivals`, `Jail`, `Gangwars`, `Bans`, `LastBan`, `Warns`) VALUES
+(1, '', 0, 0, 0, 0, 0, 0, 0, '-', 0),
+(1, '', 0, 0, 0, 0, 0, 0, 0, '-', 0),
+(1, '', 0, 0, 0, 0, 0, 0, 0, '-', 0),
+(1, '', 0, 0, 0, 0, 0, 0, 0, '-', 0),
+(1, '', 0, 0, 0, 0, 0, 0, 0, '-', 0),
+(1, '', 0, 0, 0, 0, 0, 0, 0, '-', 0),
+(1, '', 0, 0, 0, 0, 0, 0, 0, '-', 0),
+(1, '', 0, 0, 0, 0, 0, 0, 0, '-', 0),
+(1, '', 0, 0, 0, 0, 0, 0, 0, '-', 0);
 
 -- --------------------------------------------------------
 
