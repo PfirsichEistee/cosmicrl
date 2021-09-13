@@ -170,7 +170,7 @@ function cosmicLoadPlayerStats(userID)
 	userID = convToID(userID)
 	
 	if not stats[userID] then
-		local result = dbPoll(dbQuery(dbHandler, "SELECT Items, Weapons FROM inventory WHERE ID=?", userID), -1)
+		local result = dbPoll(dbQuery(dbHandler, "SELECT * FROM playerstats WHERE ID=?", userID), -1)
 		
 		if result and result[1] then
 			local new = {
